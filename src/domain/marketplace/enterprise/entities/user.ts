@@ -1,9 +1,9 @@
-import { Entity } from "@/core/entity"
+import { Entity } from "../../../../core/entity"
 import { Role } from "../value-objects/role"
 import { UniqueEntityId } from "@/core/unique-entity-id"
 import { Optional } from "@/core/types/optional"
 
-interface UserProps {
+export interface UserProps {
     name:string
     email: string
     password: string
@@ -32,7 +32,6 @@ get name (){
    return this.props.password = newPassword
  }
 
-
 public role(role: string){
      const roleInstance = Role.fromString(role)
 
@@ -42,10 +41,11 @@ public role(role: string){
       this.props.role = roleInstance
  }
  
-  static create(props: Optional<UserProps, 'createdAt'>, id?: UniqueEntityId){
+  static create(props: Optional<UserProps, 'createdAt' | 'role'>, id?: UniqueEntityId){
     const user = new User({
         ...props,
         createdAt: props.createdAt ?? new Date(),
+        role: props.role ?? Role.fromString('client')
     }, id)
     return user 
   }

@@ -1,23 +1,21 @@
-import { Either, left, right } from "@/core/either";
+import { Either, left, right } from "../../../../core/either";
 import { User } from "../../enterprise/entities/user";
-import { Role } from "../../enterprise/value-objects/role";
 import { UsersRepository } from "../repo/users-repository";
 import { hash } from "bcryptjs";
-import { UserAlreadyExistsError } from "@/core/errors/user-already-exists-error";
+import { UserAlreadyExistsError } from "../../../../core/errors/user-already-exists-error";
 
-interface CreateUserUseCaseRequest {
+interface RegisterUseCaseRequest {
     name: string;
     email: string;
     password: string;
-    role: Role;
     createdAt: Date;
 }
 
-type CreateUseUseCaseResponse = Either< UserAlreadyExistsError, {
+type RegisterUseCaseResponse = Either< UserAlreadyExistsError, {
     user: User
 }>
 
-export class CreateUserUseCase {
+export class RegisterUserUseCase {
    constructor(
     private usersRepository: UsersRepository
    ){}
@@ -26,15 +24,14 @@ export class CreateUserUseCase {
     name,
     email,
     password,
-    role,
     createdAt
-}: CreateUserUseCaseRequest): Promise<CreateUseUseCaseResponse>{
+}: RegisterUseCaseRequest): Promise<RegisterUseCaseResponse>{
      
     const passwordHash = await hash(password, 7)
     
     const useWithSameEmail = await this.usersRepository.findByEmail(email)
 
-    if(!useWithSameEmail){
+    if(useWithSameEmail){
         return left(new UserAlreadyExistsError())
     }
 
@@ -42,7 +39,6 @@ export class CreateUserUseCase {
         name,
         email,
         password: passwordHash,
-        role,
         createdAt
     })
    
