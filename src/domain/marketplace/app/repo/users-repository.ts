@@ -1,6 +1,9 @@
+import { UniqueEntityId } from "@/core/unique-entity-id";
 import { User } from "../../enterprise/entities/user";
 
 export interface UsersRepository {
     create(user: User): Promise<User>
     findByEmail(email: string): Promise<User | null>
+    findById(id: string): Promise<User | null>
+    save<T>(userId: UniqueEntityId, props?: T): Promise<void>
 }

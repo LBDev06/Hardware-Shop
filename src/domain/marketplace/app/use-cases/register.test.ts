@@ -2,6 +2,7 @@ import { InMemoryUsersRepository } from "../../../../../test/repo/in-memory-user
 import { RegisterUserUseCase } from "./register";
 import { beforeEach, describe, expect, it } from "vitest";
 import { hash } from "bcryptjs";
+import { makeUser } from "test/factories/makeUser";
 
 let inMemoryUsersRepository: InMemoryUsersRepository
 let sut: RegisterUserUseCase
@@ -28,4 +29,20 @@ describe('Register Use Case', ()=>{
 
        expect(user).toBeRight()
     })
+
+    it('should not be able to register with email exists.', async()=>{
+      const user = await makeUser()
+
+      await inMemoryUsersRepository.create(user)
+
+      const registerUser = await sut.execute({
+        name:'Alberto',
+        email:'Alberto1243@gmail.com',
+        password: '1234234234',
+        createdAt: new Date()
+      })
+     
+      expect(registerUser).toBeLeft()
+    })
+
 })

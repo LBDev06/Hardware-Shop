@@ -4,6 +4,7 @@ import { UniqueEntityId } from "@/core/unique-entity-id"
 import { Optional } from "@/core/types/optional"
 
 export interface UserProps {
+    id?: UniqueEntityId
     name:string
     email: string
     password: string
@@ -32,7 +33,11 @@ get name (){
    return this.props.password = newPassword
  }
 
-public role(role: string){
+ get role(){
+    return this.props.role
+ }
+
+public modifyUserRole(role: string){
      const roleInstance = Role.fromString(role)
 
      if(!roleInstance){
