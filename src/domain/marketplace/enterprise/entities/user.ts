@@ -22,28 +22,29 @@ get name (){
     return this.props.email
  }
 
- set changeEmail(newEmail: string){
-     this.props.email = newEmail
+ updateEmail(newEmail: string){
+    this.props.email = newEmail
  }
 
- public changePassword(newPassword: string){
-   if(newPassword === this.props.password){
-    throw new Error('New password must be different from the old password')
-   }
-   return this.props.password = newPassword
+ get password(){
+  return this.props.password
  }
 
- get role(){
-    return this.props.role
+ updatePassword( newPassword: string){
+  this.props.password = newPassword
  }
 
 public modifyUserRole(role: string){
-     const roleInstance = Role.fromString(role)
+    const roleInstance = Role.fromString(role)
 
      if(!roleInstance){
         throw new Error(`Invalid role ${role}`)
      }
       this.props.role = roleInstance
+ }
+
+ get role(){
+  return this.props.role
  }
  
   static create(props: Optional<UserProps, 'createdAt' | 'role'>, id?: UniqueEntityId){
