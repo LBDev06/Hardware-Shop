@@ -3,8 +3,7 @@ import { ProductRepository } from "../repo/product-repository";
 import { Product } from "../../enterprise/entities/product";
 import { UsersRepository } from "../repo/users-repository";
 import { UserNotAllowedError } from "@/core/errors/user-not-allowed-error";
-import { UserAlreadyExistsError } from "@/core/errors/user-already-exists-error"; // Talvez trocar para ResourceNotFoundError no futuro
-import { ProductCategory, HardwareType } from "../../enterprise/value-objects/product-category";
+import { ProductCategory } from "../../enterprise/value-objects/product-category";
 import { ProductSpecs, HardwareSpec } from "../../enterprise/value-objects/product-specs";
 import { ResourceNotFoundError } from "@/core/errors/resource-not-found-error";
 
@@ -57,6 +56,7 @@ export class CreateProductUseCase {
   );
   
  const product = Product.create({
+   authorId: user.id,
     name,
     price,
     stock,

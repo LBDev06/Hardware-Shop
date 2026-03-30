@@ -8,4 +8,23 @@ export class InMemoryProductsRepository implements ProductRepository {
         this.products.push(product)
         return product
     }
+
+    async findById(id: string): Promise<Product | null> {
+        const product = this.products.find(product => product.id.toString() === id)
+        
+        if(!product){
+            return null
+        }
+        return product
+    }
+
+    async save(product: Product): Promise<void> {
+        const itemIndex = this.products.findIndex(item => item.id.toString() === product.id.toString())
+        this.products[itemIndex] = product
+    }
+
+    async delete(product: string): Promise<void> {
+        const productIndex = this.products.findIndex(item => item.id.toString() === product)
+        this.products.splice(productIndex, 1)
+    }
 }

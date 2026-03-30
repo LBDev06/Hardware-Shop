@@ -19,6 +19,7 @@ export function makeProduct(
 
   const product = Product.create(
     {
+      authorId: new UniqueEntityId(),
       name: "RTX 3060",
       price: 1300,
       stock: 10,
