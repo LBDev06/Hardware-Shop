@@ -1,3 +1,4 @@
+import { PaginationParams } from "@/core/repo/pagination-params";
 import { ProductRepository } from "@/domain/marketplace/app/repo/product-repository";
 import { Product } from "@/domain/marketplace/enterprise/entities/product";
 
@@ -11,8 +12,8 @@ export class InMemoryProductsRepository implements ProductRepository {
 
     async findById(id: string): Promise<Product | null> {
         const product = this.products.find(product => product.id.toString() === id)
-        
-        if(!product){
+
+        if (!product) {
             return null
         }
         return product
@@ -26,5 +27,17 @@ export class InMemoryProductsRepository implements ProductRepository {
     async delete(product: string): Promise<void> {
         const productIndex = this.products.findIndex(item => item.id.toString() === product)
         this.products.splice(productIndex, 1)
+    }
+
+    async findManyProducts({ page }: PaginationParams): Promise<Product[]> {
+        const product = this.products.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+            .slice((page - 1) * 20, page * 20)
+
+        return product
+    }
+
+    async searchProduct(query: string): Promise<Product[]> {
+        const product = this.products.filter(product => product.name.toLowerCase().includes(query.toLowerCase()))
+        return product
     }
 }
