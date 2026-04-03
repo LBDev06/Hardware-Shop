@@ -40,4 +40,11 @@ export class InMemoryProductsRepository implements ProductRepository {
         const product = this.products.filter(product => product.name.toLowerCase().includes(query.toLowerCase()))
         return product
     }
+
+    async findManyProductsBySellerId(sellerId: string, { page }: PaginationParams): Promise<Product[] | null> {
+        const product = this.products.filter(product => product.authorId.toString() === sellerId)
+            .slice((page - 1) * 20, page * 20)
+
+        return product
+    }
 }

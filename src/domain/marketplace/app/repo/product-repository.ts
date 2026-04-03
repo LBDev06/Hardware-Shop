@@ -8,4 +8,5 @@ export interface ProductRepository {
     delete(product: string): Promise<void>
     findManyProducts(params: PaginationParams): Promise<Product[]>
     searchProduct(query: string): Promise<Product[] | null>
+    findManyProductsBySellerId(sellerId: string, params: PaginationParams): Promise<Product[] | null>
 }
