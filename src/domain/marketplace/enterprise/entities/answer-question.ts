@@ -2,22 +2,19 @@ import { Entity } from "@/core/entity";
 import { UniqueEntityId } from "@/core/unique-entity-id";
 import { Optional } from "@/core/types/optional";
 
-export interface QuestionProps {
+interface AnswerQuestionProps {
     id?: UniqueEntityId;
     authorId: UniqueEntityId;
-    productId: UniqueEntityId;
+    productId: UniqueEntityId
+    questionId: UniqueEntityId;
     content: string;
     createdAt: Date;
     updatedAt?: Date;
 }
 
-export class Question extends Entity<QuestionProps> {
+export class AnswerQuestion extends Entity<AnswerQuestionProps> {
     get authorId() {
         return this.props.authorId
-    }
-
-    get productId() {
-        return this.props.productId
     }
 
     get content() {
@@ -41,13 +38,14 @@ export class Question extends Entity<QuestionProps> {
         this.props.updatedAt = new Date()
     }
 
-    static create(props: Optional<QuestionProps, 'createdAt' | 'updatedAt'>, id?: UniqueEntityId) {
-        const question = new Question({
+    static create(props: Optional<AnswerQuestionProps, 'createdAt' | 'updatedAt'>, id?: UniqueEntityId) {
+        const answerQuestion = new AnswerQuestion({
             ...props,
             createdAt: props.createdAt ?? new Date(),
             updatedAt: props.updatedAt ?? new Date()
         }, id)
 
-        return question
+        return answerQuestion
     }
+
 }
