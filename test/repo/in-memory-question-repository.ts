@@ -1,18 +1,33 @@
 import { QuestionRepository } from "@/domain/marketplace/app/repo/question-repository";
-import { Comment } from "@/domain/marketplace/enterprise/entities/question";
+import { Question } from "@/domain/marketplace/enterprise/entities/question";
 
 export class InMemoryQuestionRepository implements QuestionRepository {
-    items: Comment[] = []
+    items: Question[] = []
 
-    async create(comment: Comment): Promise<void> {
-        this.items.push(comment)
+    async create(question: Question): Promise<void> {
+        this.items.push(question)
     }
 
-    async save(comment: Comment): Promise<void> {
-        const itemIndex = this.items.findIndex(item => item.id === comment.id)
+    async save(question: Question): Promise<void> {
+        const itemIndex = this.items.findIndex(item => item.id === question.id)
 
         if (itemIndex >= 0) {
-            this.items[itemIndex] = comment
+            this.items[itemIndex] = question
         }
+    }
+
+    async findById(id: string): Promise<Question | null> {
+        const question = this.items.find(item => item.id.toString() === id)
+
+        if (!question) {
+            return null
+        }
+
+        return question
+    }
+
+    async delete(question: Question): Promise<void> {
+        const questionIndex = this.items.findIndex(item => item.id === question.id)
+        this.items.splice(questionIndex, 1)
     }
 }
