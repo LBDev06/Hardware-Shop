@@ -2,7 +2,7 @@ import { Entity } from "@/core/entity";
 import { UniqueEntityId } from "@/core/unique-entity-id";
 import { Optional } from "@/core/types/optional";
 
-interface AnswerQuestionProps {
+export interface AnswerQuestionProps {
     id?: UniqueEntityId;
     authorId: UniqueEntityId;
     productId: UniqueEntityId
