@@ -26,6 +26,10 @@ export class AnswerQuestion extends Entity<AnswerQuestionProps> {
         this.touch()
     }
 
+    get questionId() {
+        return this.props.questionId
+    }
+
     get createdAt() {
         return this.props.createdAt
     }
