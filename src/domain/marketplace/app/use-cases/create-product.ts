@@ -6,6 +6,8 @@ import { UserNotAllowedError } from "@/core/errors/user-not-allowed-error";
 import { ProductCategory } from "../../enterprise/value-objects/product-category";
 import { ProductSpecs, HardwareSpec } from "../../enterprise/value-objects/product-specs";
 import { ResourceNotFoundError } from "@/core/errors/resource-not-found-error";
+import { ProductAttachment } from "../../enterprise/entities/product-attachment";
+import { UniqueEntityId } from "@/core/unique-entity-id";
 
 interface CreateProductUseCaseRequest {
   userId: string;
@@ -13,12 +15,13 @@ interface CreateProductUseCaseRequest {
   price: number;
   stock: number;
   description: string;
-  specs: HardwareSpec[]; 
-  category: string;      
+  specs: HardwareSpec[];
+  attachmentsIds: string[];
+  category: string;
 }
 
 export type CreateProductUseCaseResponse = Either<
-  ResourceNotFoundError | UserNotAllowedError, 
+  ResourceNotFoundError | UserNotAllowedError,
   { product: Product }
 >
 
@@ -26,7 +29,7 @@ export class CreateProductUseCase {
   constructor(
     private usersRepository: UsersRepository,
     private productRepository: ProductRepository
-  ) {}
+  ) { }
 
   async execute({
     userId,
@@ -35,36 +38,45 @@ export class CreateProductUseCase {
     stock,
     specs,
     description,
-    category, 
+    category,
+    attachmentsIds
   }: CreateProductUseCaseRequest): Promise<CreateProductUseCaseResponse> {
-    
+
     const user = await this.usersRepository.findById(userId)
 
     if (!user) {
-      return left(new ResourceNotFoundError()) 
+      return left(new ResourceNotFoundError())
     }
 
     if (user.role.value !== 'seller') {
-      return left(new UserNotAllowedError()) 
+      return left(new UserNotAllowedError())
     }
 
-    const categoryVO = ProductCategory.create(category); 
-    
-    const specsVO = ProductSpecs.create(
-    specs, 
-    categoryVO.value 
-  );
-  
- const product = Product.create({
-   authorId: user.id,
-    name,
-    price,
-    stock,
-    description,
-    category: categoryVO,
-    specs: specsVO,
-  });
+    const categoryVO = ProductCategory.create(category);
 
+    const specsVO = ProductSpecs.create(
+      specs,
+      categoryVO.value
+    );
+
+    const product = Product.create({
+      authorId: user.id,
+      name,
+      price,
+      stock,
+      description,
+      category: categoryVO,
+      specs: specsVO,
+    });
+
+    const productAttachments = attachmentsIds.map(id => {
+      return ProductAttachment.create({
+        attachmentId: new UniqueEntityId(id),
+        productId: product.id
+      })
+    })
+
+    product.attachments = productAttachments
     await this.productRepository.create(product)
 
     return right({

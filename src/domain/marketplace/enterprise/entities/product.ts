@@ -1,13 +1,15 @@
-import { Entity } from "@/core/entity";
 import { UniqueEntityId } from "@/core/unique-entity-id";
 import { Optional } from "@/core/types/optional";
 import { ProductCategory } from "../value-objects/product-category";
 import { ProductSpecs } from "../value-objects/product-specs";
+import { AggregateRoot } from "@/core/entities/aggregate-root";
+import { ProductAttachment } from "./product-attachment";
 
 export interface ProductProps {
    id?: UniqueEntityId;
    authorId: UniqueEntityId;
    name: string;
+   attachments: ProductAttachment[]
    price: number;
    stock: number;
    description: string;
@@ -16,7 +18,7 @@ export interface ProductProps {
    createdAt: Date;
 }
 
-export class Product extends Entity<ProductProps> {
+export class Product extends AggregateRoot<ProductProps> {
 
    get authorId() {
       return this.props.authorId
@@ -70,14 +72,23 @@ export class Product extends Entity<ProductProps> {
       this.props.specs = newSpecs
    }
 
+   get attachments() {
+      return this.props.attachments
+   }
+
+   set attachments(newAttachments: ProductAttachment[]) {
+      this.props.attachments = newAttachments
+   }
+
    get createdAt() {
       return this.props.createdAt
    }
 
-   static create(props: Optional<ProductProps, 'createdAt'>, id?: UniqueEntityId) {
+   static create(props: Optional<ProductProps, 'createdAt' | 'attachments'>, id?: UniqueEntityId) {
       const hardware = new Product({
          ...props,
-         createdAt: props.createdAt ?? new Date()
+         createdAt: props.createdAt ?? new Date(),
+         attachments: props.attachments ?? []
       }, id)
 
       return hardware
