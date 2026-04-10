@@ -4,7 +4,7 @@ import { Product } from "../../enterprise/entities/product";
 import { UsersRepository } from "../repo/users-repository";
 import { UserNotAllowedError } from "@/core/errors/user-not-allowed-error";
 import { ProductCategory } from "../../enterprise/value-objects/product-category";
-import { ProductSpecs, HardwareSpec } from "../../enterprise/value-objects/product-specs";
+import { ProductSpecs, SpecInput } from "../../enterprise/value-objects/product-specs";
 import { ResourceNotFoundError } from "@/core/errors/resource-not-found-error";
 import { ProductAttachment } from "../../enterprise/entities/product-attachment";
 import { UniqueEntityId } from "@/core/unique-entity-id";
@@ -15,7 +15,7 @@ interface CreateProductUseCaseRequest {
   price: number;
   stock: number;
   description: string;
-  specs: HardwareSpec[];
+  specs: SpecInput;
   attachmentsIds: string[];
   category: string;
 }
@@ -52,11 +52,11 @@ export class CreateProductUseCase {
       return left(new UserNotAllowedError())
     }
 
-    const categoryVO = ProductCategory.create(category);
+    const productCategory = ProductCategory.create(category);
 
-    const specsVO = ProductSpecs.create(
+    const productSpecs = ProductSpecs.create(
       specs,
-      categoryVO.value
+      productCategory.value
     );
 
     const product = Product.create({
@@ -65,8 +65,8 @@ export class CreateProductUseCase {
       price,
       stock,
       description,
-      category: categoryVO,
-      specs: specsVO,
+      category: productCategory,
+      specs: productSpecs,
     });
 
     const productAttachments = attachmentsIds.map(id => {

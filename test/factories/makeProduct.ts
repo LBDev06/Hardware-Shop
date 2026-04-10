@@ -10,12 +10,12 @@ export function makeProduct(
 
   const category = override.category ?? ProductCategory.create("GPU");
 
-  const specs = override.specs ?? ProductSpecs.create([
-    { name: "Memória (VRAM)", value: 12, unit: "GB" }, 
-    { name: "TDP", value: 170, unit: "W" },            
-    { name: "Interface", value: "PCIe 4.0" },         
-    { name: "Tipo de Memória", value: "GDDR6" }      
-  ], category.value); 
+  const specs = override.specs ?? ProductSpecs.create({
+    vram: 12,
+    tdp: 170,
+    interface: 'PCIe 4.0',
+    memoryType: 'GDDR6',
+  }, category.value);
 
   const product = Product.create(
     {
@@ -24,7 +24,7 @@ export function makeProduct(
       price: 1300,
       stock: 10,
       description: "Placa de vídeo de excelente custo-benefício para Full HD.",
-      category, 
+      category,
       specs,
       createdAt: new Date(),
       ...override,

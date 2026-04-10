@@ -1,36 +1,29 @@
-export type HardwareType = 
-  | 'CPU' 
-  | 'Motherboard' 
-  | 'RAM' 
-  | 'GPU' 
-  | 'Storage' 
-  | 'PSU' 
+export const HardwareTypes = [
+  'CPU',
+  'Motherboard',
+  'RAM',
+  'GPU',
+  'Storage',
+  'PSU',
+] as const;
+
+export type HardwareType = (typeof HardwareTypes)[number];
 
 export class ProductCategory {
-  private readonly _value: HardwareType;
-
-  private constructor(value: HardwareType) {
-    this._value = value;
-  }
+  private constructor(private readonly _value: HardwareType) {}
 
   public static create(value: string): ProductCategory {
-
-    const normalizedValue = value.trim().toUpperCase() as HardwareType;
+    const trimmedValue = value.trim();
     
-    const validCategories: HardwareType[] = [
-      'CPU',
-      'Motherboard',
-      'RAM',
-      'GPU',
-      'Storage',
-      'PSU'
-    ];
+    const matchedCategory = HardwareTypes.find(
+      (category) => category.toLowerCase() === trimmedValue.toLowerCase()
+    );
 
-    if (!validCategories.includes(normalizedValue)) {
-      throw new Error(`Categoria inválida. Categorias aceitas: ${validCategories.join(', ')}`);
+    if (!matchedCategory) {
+      throw new Error(`Categoria inválida. Categorias aceitas: ${HardwareTypes.join(', ')}`);
     }
 
-    return new ProductCategory(normalizedValue);
+    return new ProductCategory(matchedCategory);
   }
 
   get value(): HardwareType {

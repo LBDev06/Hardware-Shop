@@ -30,11 +30,11 @@ describe('Create Product Use Case', () => {
       stock: 10,
       description: 'Placa de vídeo de excelente custo-benefício para Full HD.',
       category: 'GPU',
-      specs: [
-        { name: "Memória (VRAM)", value: 12, unit: "GB" },
-        { name: "TDP", value: 170, unit: "W" },
-        { name: "Interface", value: "PCIe 4.0" },
-      ],
+      specs: {
+        vram: 12,
+        tdp: 170,
+        interface: 'PCIe 4.0',
+      },
       attachmentsIds: ['1', '2']
     })
 
@@ -56,11 +56,11 @@ describe('Create Product Use Case', () => {
       stock: 10,
       description: 'Placa de vídeo de excelente custo-benefício para Full HD.',
       category: 'GPU',
-      specs: [
-        { name: "Memória (VRAM)", value: 12, unit: "GB" },
-        { name: "TDP", value: 170, unit: "W" },
-        { name: "Interface", value: "PCIe 4.0" },
-      ],
+      specs: {
+        vram: 12,
+        tdp: 170,
+        interface: 'PCIe 4.0',
+      },
       attachmentsIds: ['1', '2']
     })
 
