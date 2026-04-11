@@ -8,6 +8,7 @@ import { ProductSpecs, SpecInput } from "../../enterprise/value-objects/product-
 import { ResourceNotFoundError } from "@/core/errors/resource-not-found-error";
 import { ProductAttachment } from "../../enterprise/entities/product-attachment";
 import { UniqueEntityId } from "@/core/unique-entity-id";
+import { ProductAttachmentList } from "../../enterprise/entities/product-attachment-list";
 
 interface CreateProductUseCaseRequest {
   userId: string;
@@ -76,7 +77,7 @@ export class CreateProductUseCase {
       })
     })
 
-    product.attachments = productAttachments
+    product.attachments = new ProductAttachmentList(productAttachments)
     await this.productRepository.create(product)
 
     return right({

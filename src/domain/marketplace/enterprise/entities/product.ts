@@ -1,15 +1,16 @@
 import { UniqueEntityId } from "@/core/unique-entity-id";
 import { Optional } from "@/core/types/optional";
 import { ProductCategory } from "../value-objects/product-category";
-import { ProductSpecs } from "../value-objects/product-specs";
+import { ProductSpecs, SpecInput } from "../value-objects/product-specs";
 import { AggregateRoot } from "@/core/entities/aggregate-root";
+import { ProductAttachmentList } from "../entities/product-attachment-list"
 import { ProductAttachment } from "./product-attachment";
 
 export interface ProductProps {
    id?: UniqueEntityId;
    authorId: UniqueEntityId;
    name: string;
-   attachments: ProductAttachment[]
+   attachments: ProductAttachmentList
    price: number;
    stock: number;
    description: string;
@@ -60,24 +61,40 @@ export class Product extends AggregateRoot<ProductProps> {
       return this.props.category
    }
 
-   set category(newCategory: ProductCategory) {
-      this.props.category = newCategory
-   }
-
    get specs() {
       return this.props.specs
-   }
-
-   set specs(newSpecs: ProductSpecs) {
-      this.props.specs = newSpecs
    }
 
    get attachments() {
       return this.props.attachments
    }
 
-   set attachments(newAttachments: ProductAttachment[]) {
+   set attachments(newAttachments: ProductAttachmentList) {
       this.props.attachments = newAttachments
+   }
+
+   updateCategoryAndSpecs(specs?: SpecInput, category?: string) {
+      if (category) {
+         this.props.category = ProductCategory.create(category)
+      }
+
+      if (specs) {
+         this.props.specs = ProductSpecs.create(specs, this.props.category.value)
+      }
+   }
+
+   updateAttachments(currentAttachments: ProductAttachment[], attachmentsIds: string[], productId: UniqueEntityId) {
+      const productAttachmentsList = new ProductAttachmentList(currentAttachments)
+
+      const productAttachments = attachmentsIds.map((attachmentId) => {
+         return ProductAttachment.create({
+            attachmentId: new UniqueEntityId(attachmentId),
+            productId: productId
+         })
+      })
+
+      productAttachmentsList.update(productAttachments)
+      this.props.attachments = productAttachmentsList
    }
 
    get createdAt() {
@@ -88,7 +105,7 @@ export class Product extends AggregateRoot<ProductProps> {
       const hardware = new Product({
          ...props,
          createdAt: props.createdAt ?? new Date(),
-         attachments: props.attachments ?? []
+         attachments: props.attachments ?? new ProductAttachmentList()
       }, id)
 
       return hardware

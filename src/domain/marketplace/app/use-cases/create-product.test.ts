@@ -40,7 +40,7 @@ describe('Create Product Use Case', () => {
 
     expect(CreateProduct).toBeRight()
     expect(inMemoryProductsRepository.products).toHaveLength(1)
-    expect(inMemoryProductsRepository.products[0].attachments).toHaveLength(2)
+    expect(inMemoryProductsRepository.products[0].attachments.currentItems).toHaveLength(2)
   })
 
 

@@ -5,8 +5,8 @@ import { RequiredUpdateFieldError } from "@/core/errors/required-update-field-er
 import { Product } from "../../enterprise/entities/product";
 import { UsersRepository } from "../repo/users-repository";
 import { ProductRepository } from "../repo/product-repository";
-import { ProductCategory } from "../../enterprise/value-objects/product-category";
-import { ProductSpecs, SpecInput } from "../../enterprise/value-objects/product-specs";
+import { SpecInput } from "../../enterprise/value-objects/product-specs";
+import { ProductAttachmentRepository } from "../repo/product-attachment-repository";
 
 interface EditProductUseCaseRequest {
   authorId: string;
@@ -17,6 +17,7 @@ interface EditProductUseCaseRequest {
   description?: string;
   specs?: SpecInput;
   category?: string;
+  attachmentsIds?: string[];
 }
 
 type EditProductUseCaseResponse = Either<
@@ -27,8 +28,9 @@ type EditProductUseCaseResponse = Either<
 export class EditProductUseCase {
   constructor(
     private usersRepository: UsersRepository,
+    private productAttachmentRepository: ProductAttachmentRepository,
     private productsRepository: ProductRepository,
-  ) {}
+  ) { }
 
   async execute({
     productId,
@@ -39,6 +41,7 @@ export class EditProductUseCase {
     description,
     specs,
     category,
+    attachmentsIds
   }: EditProductUseCaseRequest): Promise<EditProductUseCaseResponse> {
     const user = await this.usersRepository.findById(authorId);
 
@@ -56,24 +59,21 @@ export class EditProductUseCase {
       return left(new UserNotAllowedError());
     }
 
-    if (category && !specs) {
+    if (category !== product.category.value && !specs) {
       return left(new RequiredUpdateFieldError());
     }
 
-    if (category) {
-      const newCategory = ProductCategory.create(category);
-      product.category = newCategory;
+    product.updateCategoryAndSpecs(specs, category)
+
+    if (attachmentsIds) {
+      const currentProductAttachments = await this.productAttachmentRepository.findManyByProductId(productId)
+      product.updateAttachments(currentProductAttachments, attachmentsIds, product.id)
     }
 
-    if (specs) {
-      const targetCategory = product.category.value;
-      product.specs = ProductSpecs.create(specs, targetCategory);
-    }
-
-    if (name !== undefined) product.name = name;
-    if (price !== undefined) product.price = price;
-    if (stock !== undefined) product.stock = stock;
-    if (description !== undefined) product.description = description;
+    if (name) product.name = name;
+    if (price) product.price = price;
+    if (stock) product.stock = stock;
+    if (description) product.description = description;
 
     await this.productsRepository.save(product);
 
