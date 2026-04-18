@@ -42,6 +42,14 @@ export class Cart extends AggregateRoot<CartProps> {
         }, 0)
     }
 
+    removeItem(productId: string) {
+        const item = this.items.getItems().find(item => item.productId.toString() === productId)
+
+        if (item) {
+            this.items.remove(item)
+        }
+    }
+
     static create(props: Optional<CartProps, 'items'>, id?: UniqueEntityId) {
         return new Cart({
             ...props,
