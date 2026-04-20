@@ -1,6 +1,7 @@
-import { Entity } from "@/core/entity";
 import { UniqueEntityId } from "@/core/unique-entity-id";
 import { Optional } from "@/core/types/optional";
+import { AggregateRoot } from "@/core/entities/aggregate-root";
+import { QuestionCreatedEvent } from "../events/question-created-event";
 
 export interface QuestionProps {
     id?: UniqueEntityId;
@@ -11,7 +12,7 @@ export interface QuestionProps {
     updatedAt?: Date;
 }
 
-export class Question extends Entity<QuestionProps> {
+export class Question extends AggregateRoot<QuestionProps> {
     get authorId() {
         return this.props.authorId
     }
@@ -47,6 +48,12 @@ export class Question extends Entity<QuestionProps> {
             createdAt: props.createdAt ?? new Date(),
             updatedAt: props.updatedAt ?? new Date()
         }, id)
+
+        const isNewQuestion = !id
+
+        if (isNewQuestion) {
+            question.addDomainEvent(new QuestionCreatedEvent(question))
+        }
 
         return question
     }

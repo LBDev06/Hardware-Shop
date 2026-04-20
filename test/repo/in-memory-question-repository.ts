@@ -1,12 +1,14 @@
 import { QuestionRepository } from "@/domain/marketplace/app/repo/question-repository";
 import { Question } from "@/domain/marketplace/enterprise/entities/question";
 import { PaginationParams } from "@/core/repo/pagination-params";
+import { DomainEvents } from "@/core/events/domain-events";
 
 export class InMemoryQuestionRepository implements QuestionRepository {
     items: Question[] = []
 
     async create(question: Question): Promise<void> {
         this.items.push(question)
+        DomainEvents.dispatchEventsForAggregate(question.id)
     }
 
     async save(question: Question): Promise<void> {
@@ -15,6 +17,7 @@ export class InMemoryQuestionRepository implements QuestionRepository {
         if (itemIndex >= 0) {
             this.items[itemIndex] = question
         }
+        DomainEvents.dispatchEventsForAggregate(question.id)
     }
 
     async findById(id: string): Promise<Question | null> {
