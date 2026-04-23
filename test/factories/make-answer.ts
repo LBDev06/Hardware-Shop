@@ -6,7 +6,7 @@ export async function makeAnswerQuestion(override: Partial<AnswerQuestionProps> 
         authorId: new UniqueEntityId(),
         productId: new UniqueEntityId(),
         questionId: new UniqueEntityId(),
-        content: '170W',
+        content: 'Ela tem 170W.',
         createdAt: new Date(),
         ...override
     })

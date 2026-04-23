@@ -4,7 +4,7 @@ import { InMemoryAnswerQuestionsRepository } from "test/repo/in-memory-answer-qu
 import { ListAnswersByProductQuestionsUseCase } from "./list-answers-by-product-questions";
 import { InMemoryQuestionRepository } from "test/repo/in-memory-question-repository";
 import { makeQuestion } from "test/factories/makeQuestion";
-import { makeAnswerQuestion } from '../../../../../test/factories/makeAnswer';
+import { makeAnswerQuestion } from '../../../../../test/factories/make-answer';
 import { randomUUID } from "node:crypto";
 
 let inMemoryQuestionRepository: InMemoryQuestionRepository

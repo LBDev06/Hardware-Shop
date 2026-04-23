@@ -8,7 +8,7 @@ import { makeUser } from "test/factories/makeUser"
 import { makeProduct } from "test/factories/makeProduct"
 import { makeQuestion } from "test/factories/makeQuestion"
 import { EditAnswerQuestionUseCase } from "./edit-answer-question"
-import { makeAnswerQuestion } from "test/factories/makeAnswer"
+import { makeAnswerQuestion } from "test/factories/make-answer"
 
 let inMemoryUserRepository: InMemoryUsersRepository
 let inMemoryProductsRepository: InMemoryProductsRepository

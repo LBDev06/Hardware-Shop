@@ -1,6 +1,7 @@
 import { AnswerQuestionRepository } from "@/domain/marketplace/app/repo/answer-question-repository";
 import { AnswerQuestion } from "@/domain/marketplace/enterprise/entities/answer-question";
 import { PaginationParams } from "@/core/repo/pagination-params";
+import { DomainEvents } from "@/core/events/domain-events";
 
 export class InMemoryAnswerQuestionsRepository implements AnswerQuestionRepository {
     public answerQuestion: AnswerQuestion[] = []
@@ -33,6 +34,7 @@ export class InMemoryAnswerQuestionsRepository implements AnswerQuestionReposito
 
     async save(answerQuestion: AnswerQuestion): Promise<void> {
         this.answerQuestion.push(answerQuestion)
+        DomainEvents.dispatchEventsForAggregate(answerQuestion.id)
     }
 
 }

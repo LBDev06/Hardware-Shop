@@ -7,7 +7,7 @@ import { Role } from "../../enterprise/value-objects/role"
 import { makeUser } from "test/factories/makeUser"
 import { makeProduct } from "test/factories/makeProduct"
 import { makeQuestion } from "test/factories/makeQuestion"
-import { makeAnswerQuestion } from "test/factories/makeAnswer"
+import { makeAnswerQuestion } from "test/factories/make-answer"
 import { DeleteAnswerQuestionUseCase } from "./delete-answer-question"
 
 let inMemoryUserRepository: InMemoryUsersRepository
