@@ -17,6 +17,7 @@ describe('Send Notification', () => {
             recipientId: '1',
             title: 'Nova notificação',
             content: 'Conteúdo da notificação',
+            eventType: "QUESTION_CREATED"
         })
 
         expect(result).toBeRight()

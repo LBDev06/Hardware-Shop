@@ -1,6 +1,5 @@
 import { CartRepository } from "@/domain/marketplace/app/repo/cart-repository";
 import { Cart } from "@/domain/marketplace/enterprise/entities/cart";
-import { CartProduct } from "@/domain/marketplace/enterprise/entities/cart-product";
 
 export class InMemoryCartRepository implements CartRepository {
     public carts: Cart[] = []

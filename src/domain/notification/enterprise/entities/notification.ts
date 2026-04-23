@@ -1,13 +1,14 @@
+import { EventType } from "@/domain/notification/app/events-types"
 import { Entity } from "@/core/entity"
 import { UniqueEntityId } from "@/core/unique-entity-id"
 import { Optional } from "@/core/types/optional"
 
-interface NotificationProps {
+export interface NotificationProps {
     recipientId: UniqueEntityId
     content: string
     title: string
+    eventType: EventType
     createdAt: Date
-    readAt?: Date
 }
 
 export class Notification extends Entity<NotificationProps> {
@@ -23,12 +24,12 @@ export class Notification extends Entity<NotificationProps> {
         return this.props.title
     }
 
-    get createdAt() {
-        return this.props.createdAt
+    get eventType() {
+        return this.props.eventType
     }
 
-    get readAt() {
-        return this.props.readAt
+    get createdAt() {
+        return this.props.createdAt
     }
 
     static create(props: Optional<NotificationProps, 'createdAt'>, id?: UniqueEntityId) {

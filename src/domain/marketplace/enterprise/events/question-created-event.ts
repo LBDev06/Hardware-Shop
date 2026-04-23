@@ -13,4 +13,4 @@ export class QuestionCreatedEvent implements DomainEvent {
     getAggregateId() {
         return this.question.id
     }
-}
+} 1

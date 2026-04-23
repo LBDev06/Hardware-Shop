@@ -27,7 +27,8 @@ export class OnQuestionCreated implements EventHandler {
         await this.sendNotificationUseCase.execute({
             recipientId: product.authorId.toString(),
             title: `Nova pergunta em ${product.name}`,
-            content: event.question.content.substring(0, 40).concat('...')
+            content: event.question.content.substring(0, 40).concat('...'),
+            eventType: "QUESTION_CREATED",
         })
 
         console.log(event.question)
