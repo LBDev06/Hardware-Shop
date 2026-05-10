@@ -3,6 +3,7 @@ import { UniqueEntityId } from "@/core/unique-entity-id";
 
 interface CartProductProps {
     productId: UniqueEntityId;
+    name: string;
     quantity: number;
     price: number;
 }
@@ -10,6 +11,10 @@ interface CartProductProps {
 export class CartProduct extends Entity<CartProductProps> {
     get productId() {
         return this.props.productId
+    }
+
+    get name() {
+        return this.props.name
     }
 
     get quantity() {

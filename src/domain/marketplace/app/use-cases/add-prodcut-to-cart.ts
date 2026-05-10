@@ -44,7 +44,8 @@ export class AddProductToCartUseCase {
         const cartProduct = CartProduct.create({
             productId: new UniqueEntityId(productId),
             quantity,
-            price: product.price
+            price: product.price,
+            name: product.name
         })
 
         cart.addItem(cartProduct)
