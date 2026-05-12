@@ -1,11 +1,13 @@
 import { OrderRepository } from '../../src/domain/payment/app/repo/order-repository';
-import { Order } from '../../src/domain/payment/enterprise/order';
+import { Order } from '../../src/domain/payment/enterprise/entities/order';
+import { DomainEvents } from '@/core/events/domain-events';
 
 export class InMemoryOrderRepository implements OrderRepository {
     public items: Order[] = [];
 
     async create(order: Order): Promise<void> {
         this.items.push(order);
+        DomainEvents.dispatchEventsForAggregate(order.id);
     }
 
     async save(order: Order): Promise<void> {
@@ -13,5 +15,16 @@ export class InMemoryOrderRepository implements OrderRepository {
         if (index >= 0) {
             this.items[index] = order;
         }
+        DomainEvents.dispatchEventsForAggregate(order.id);
+    }
+
+    async findById(id: string): Promise<Order | null> {
+        const order = this.items.find((o) => o.id.toString() === id);
+
+        if (!order) {
+            return null;
+        }
+
+        return order;
     }
 }

@@ -1,7 +1,7 @@
 import { OrderRepository } from "../repo/order-repository";
 import { PaymentGateway } from "../gateways/payment-gateway";
-import { Order } from "../../enterprise/order";
-import { OrderItem } from "../../enterprise/order-item";
+import { Order } from "../../enterprise/entities/order";
+import { OrderItem } from "../../enterprise/entities/order-item";
 import { Either, right } from "@/core/either";
 import { UniqueEntityId } from "@/core/unique-entity-id";
 
