@@ -14,6 +14,10 @@ export class OrderItem extends Entity<OrderItemProps> {
         return this.props.productId
     }
 
+    get clientId() {
+        return this.props.clientId
+    }
+
     get productName() {
         return this.props.productName
     }
