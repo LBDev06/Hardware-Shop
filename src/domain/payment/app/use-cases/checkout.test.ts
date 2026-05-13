@@ -15,7 +15,9 @@ describe('Checkout', () => {
     })
 
     it('should be able to create a CONFIRMED order when payment succeeds', async () => {
+
         const result = await sut.execute({
+            clientId: 'client-1',
             productId: 'product-1',
             productName: 'Sample Product',
             price: 100,
@@ -35,6 +37,7 @@ describe('Checkout', () => {
 
     it('should be able to calculate the correct total value from cart items', async () => {
         const result = await sut.execute({
+            clientId: 'client-1',
             productId: 'product-1',
             productName: 'Sample Product',
             price: 100,
@@ -54,6 +57,7 @@ describe('Checkout', () => {
 
         await expect(
             sut.execute({
+                clientId: 'client-1',
                 productId: 'product-1',
                 productName: 'Sample Product',
                 price: 200,
@@ -68,6 +72,7 @@ describe('Checkout', () => {
 
     it('should be able to persist the order to the repository on success', async () => {
         await sut.execute({
+            clientId: 'client-1',
             productId: 'product-1',
             productName: 'Sample Product',
             price: 75,
@@ -82,6 +87,7 @@ describe('Checkout', () => {
         const processSpy = vi.spyOn(paymentGateway, 'processPayment')
 
         await sut.execute({
+            clientId: 'client-1',
             productId: 'product-1',
             productName: 'Sample Product',
             price: 120,
@@ -106,6 +112,7 @@ describe('Checkout', () => {
 
         // The order should be saved with PENDING status before payment is processed
         await sut.execute({
+            clientId: 'client-1',
             productId: 'product-1',
             productName: 'Sample Product',
             price: 50,

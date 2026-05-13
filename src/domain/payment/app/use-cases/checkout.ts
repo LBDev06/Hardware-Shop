@@ -6,6 +6,7 @@ import { Either, right } from "@/core/either";
 import { UniqueEntityId } from "@/core/unique-entity-id";
 
 interface CheckoutUseCaseRequest {
+    clientId: string;
     productId: string;
     productName: string;
     quantity: number;
@@ -25,6 +26,7 @@ export class CheckoutUseCase {
     ) { }
 
     async execute({
+        clientId,
         productId,
         productName,
         quantity,
@@ -33,6 +35,7 @@ export class CheckoutUseCase {
     }: CheckoutUseCaseRequest): Promise<CheckoutUseCaseResponse> {
 
         const orderItem = OrderItem.create({
+            clientId: new UniqueEntityId(clientId),
             productId: new UniqueEntityId(productId),
             productName,
             quantity,

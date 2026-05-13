@@ -2,6 +2,7 @@ import { UniqueEntityId } from "@/core/unique-entity-id";
 import { Entity } from "@/core/entity";
 
 interface OrderItemProps {
+    clientId: UniqueEntityId;
     productId: UniqueEntityId;
     productName: string;
     quantity: number;
