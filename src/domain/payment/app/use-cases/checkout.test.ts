@@ -14,7 +14,7 @@ describe('Checkout', () => {
         sut = new CheckoutUseCase(orderRepository, paymentGateway)
     })
 
-    it('should be able to create a CONFIRMED order when payment succeeds', async () => {
+    it('should be able to create a PENDING order when payment succeeds', async () => {
 
         const result = await sut.execute({
             clientId: 'client-1',
@@ -30,9 +30,9 @@ describe('Checkout', () => {
         const { order } = result.value
 
         expect(order).toBeDefined()
-        expect(order['props'].status).toBe('CONFIRMED')
+        expect(order['props'].status).toBe('PENDING')
         expect(orderRepository.items).toHaveLength(1)
-        expect(orderRepository.items[0]['props'].status).toBe('CONFIRMED')
+        expect(orderRepository.items[0]['props'].status).toBe('PENDING')
     })
 
     it('should be able to calculate the correct total value from cart items', async () => {
@@ -122,7 +122,7 @@ describe('Checkout', () => {
 
         // Check that it was 'PENDING' during processPayment
         expect(capturedStatus).toBe('PENDING')
-        // And 'CONFIRMED' after processPayment resolves
-        expect(orderRepository.items[0]['props'].status).toBe('CONFIRMED')
+        // And 'PENDING' after processPayment resolves
+        expect(orderRepository.items[0]['props'].status).toBe('PENDING')
     })
 })

@@ -54,7 +54,6 @@ export class CheckoutUseCase {
                 paymentMethodId
             );
 
-            order.confirm()
             await this.orderRepository.save(order)
 
             return right({

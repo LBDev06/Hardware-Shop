@@ -31,11 +31,10 @@ export class OnOrderCreated implements EventHandler {
         await this.sendNotificationRepository.execute({
             recipientId: product.authorId.toString(),
             title: 'Novo pedido',
-            content: `Você teve um novo pedido de ${order.productName}`,
+            content: `Você teve um novo pedido que esta aguardando a sua aprovação, produto: ${order.productName}`,
             eventType: "ORDER_CREATED"
         })
 
-        console.log(event.order.items)
     }
 
 }
