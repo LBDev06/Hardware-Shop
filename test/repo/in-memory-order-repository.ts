@@ -44,4 +44,11 @@ export class InMemoryOrderRepository implements OrderRepository {
             order.items.some((item) => productIds.includes(item.productId.toString()))
         );
     }
+
+    async findManyConfirmedOrdersByProductIds(productIds: string[]): Promise<Order[]> {
+        return this.items.filter((order) =>
+            order.status === 'CONFIRMED' &&
+            order.items.some((item) => productIds.includes(item.productId.toString()))
+        );
+    }
 }

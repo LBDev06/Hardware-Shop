@@ -6,4 +6,5 @@ export interface OrderRepository {
     findById(id: string): Promise<Order | null>
     findManyOrdersByClientId(clientId: string): Promise<Order[] | null>
     findManyPendingOrdersByProductIds(productIds: string[]): Promise<Order[]>
+    findManyConfirmedOrdersByProductIds(productIds: string[]): Promise<Order[]>
 }

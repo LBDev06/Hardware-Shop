@@ -30,6 +30,8 @@ export class ListPendingOrdersBySellerUseCase {
 
         const orders = await this.orderRepository.findManyPendingOrdersByProductIds(productIds)
 
-        return right({ orders })
+        const isPedingOrder = orders.filter((order) => order.status === 'PENDING')
+
+        return right({ orders: isPedingOrder })
     }
 }
