@@ -37,4 +37,11 @@ export class InMemoryOrderRepository implements OrderRepository {
 
         return orders;
     }
+
+    async findManyPendingOrdersByProductIds(productIds: string[]): Promise<Order[]> {
+        return this.items.filter((order) =>
+            order.status === 'PENDING' &&
+            order.items.some((item) => productIds.includes(item.productId.toString()))
+        );
+    }
 }
