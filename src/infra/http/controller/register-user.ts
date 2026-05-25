@@ -2,7 +2,7 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import z from "zod";
 import { makeRegisterUserUseCase } from "../factories/make-register-user-use-case";
 import { UserPresenter } from "@/infra/http/presenters/user-presenter";
-import { HttpErrorPresenter } from "@/infra/http/presenters/error/http-presenter-error";
+import { HttpRegisterErrorPresenter } from "@/infra/http/presenters/error/http-register-presenter-error";
 
 export async function registerUser(req: FastifyRequest, reply: FastifyReply) {
   const registerUserSchema = z.object({
@@ -28,11 +28,11 @@ export async function registerUser(req: FastifyRequest, reply: FastifyReply) {
     }
 
     if (result.isLeft()) {
-      return HttpErrorPresenter.toHTTP(result.value, reply);
+      return HttpRegisterErrorPresenter.toHTTP(result.value, reply);
     }
   } catch (error) {
     return reply.status(500).send({
-      message: "Internal server erro",
+      message: `${error}`,
     });
   }
 }
