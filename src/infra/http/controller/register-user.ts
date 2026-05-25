@@ -1,8 +1,8 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import z from "zod";
 import { makeRegisterUserUseCase } from "../factories/make-register-user-use-case";
-import { UserPresenter } from "@/presenters/user-presenter";
-import { HttpErrorPresenter } from "@/presenters/error/http-presenter-error";
+import { UserPresenter } from "@/infra/http/presenters/user-presenter";
+import { HttpErrorPresenter } from "@/infra/http/presenters/error/http-presenter-error";
 
 export async function registerUser(req: FastifyRequest, reply: FastifyReply) {
   const registerUserSchema = z.object({
