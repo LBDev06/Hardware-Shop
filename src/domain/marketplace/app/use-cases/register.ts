@@ -1,8 +1,8 @@
 import { Either, left, right } from "../../../../core/either";
 import { User } from "../../enterprise/entities/user";
 import { UsersRepository } from "../repo/users-repository";
-import { hash } from "bcryptjs";
 import { UserAlreadyExistsError } from "../../../../core/errors/user-already-exists-error";
+import { Bcrypt } from "../../infra/cryptography/bcrypt";
 
 interface RegisterUseCaseRequest {
   name: string;
@@ -18,14 +18,17 @@ type RegisterUseCaseResponse = Either<
 >;
 
 export class RegisterUserUseCase {
-  constructor(private usersRepository: UsersRepository) {}
+  constructor(
+    private usersRepository: UsersRepository,
+    private passwordHash: Bcrypt,
+  ) {}
 
   async execute({
     name,
     email,
     password,
   }: RegisterUseCaseRequest): Promise<RegisterUseCaseResponse> {
-    const passwordHash = await hash(password, 7);
+    const passwordHash = await this.passwordHash.hash(password, 7);
 
     const useWithSameEmail = await this.usersRepository.findByEmail(email);
 
