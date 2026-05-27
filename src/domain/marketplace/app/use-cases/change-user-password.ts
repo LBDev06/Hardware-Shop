@@ -6,50 +6,48 @@ import { SameOldCredentialsError } from "@/core/errors/same-old-credentials-erro
 import { compare, hash } from "bcryptjs";
 
 interface ChangeUserPasswordUseCaseRequest {
-    userId: string;
-    oldPassword: string;
-    newPassword: string
+  userId: string;
+  oldPassword: string;
+  newPassword: string;
 }
 
-type ChangeUserPasswordUseCaseResponse = Either<ResourceNotFoundError | InvalidCredentialError | SameOldCredentialsError, {}>
+type ChangeUserPasswordUseCaseResponse = Either<
+  ResourceNotFoundError | InvalidCredentialError | SameOldCredentialsError,
+  {}
+>;
 
-export class ChangeUserPasswordUseCase{
-   
-    constructor(
-        private usersRepository: UsersRepository
-    ){}
+export class ChangeUserPasswordUseCase {
+  constructor(private usersRepository: UsersRepository) {}
 
-   async execute({
-        userId,
-        oldPassword,
-        newPassword
-    }: ChangeUserPasswordUseCaseRequest): Promise<ChangeUserPasswordUseCaseResponse>{
-        const user = await this.usersRepository.findById(userId)
+  async execute({
+    userId,
+    oldPassword,
+    newPassword,
+  }: ChangeUserPasswordUseCaseRequest): Promise<ChangeUserPasswordUseCaseResponse> {
+    const user = await this.usersRepository.findById(userId);
 
-      if(!user){
-        return left(new ResourceNotFoundError())
-      }
-
-      const isCorrectPassword = compare(oldPassword, user.password)
-
-      if(!isCorrectPassword){
-        return left(new InvalidCredentialError())
-      }
-
-      const isSameOldPassword = oldPassword === newPassword
-
-      if(isSameOldPassword){
-        return left(new SameOldCredentialsError())
-      }
-
-      const newPasswordHash = await hash(newPassword,7)
-
-      user.updatePassword(newPasswordHash)
-
-      await this.usersRepository.save(user.id, user)
-
-      return right({})
-    
-
+    if (!user) {
+      return left(new ResourceNotFoundError());
     }
+
+    const isCorrectPassword = await compare(oldPassword, user.password);
+
+    if (!isCorrectPassword) {
+      return left(new InvalidCredentialError());
+    }
+
+    const isSameOldPassword = oldPassword === newPassword;
+
+    if (isSameOldPassword) {
+      return left(new SameOldCredentialsError());
+    }
+
+    const newPasswordHash = await hash(newPassword, 7);
+
+    user.updatePassword(newPasswordHash);
+
+    await this.usersRepository.save(user);
+
+    return right({});
+  }
 }

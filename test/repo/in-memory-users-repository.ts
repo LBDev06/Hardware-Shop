@@ -1,43 +1,37 @@
 import { UsersRepository } from "@/domain/marketplace/app/repo/users-repository";
-import { User } from '../../src/domain/marketplace/enterprise/entities/user'
-import { UniqueEntityId } from "@/core/unique-entity-id";
+import { User } from "../../src/domain/marketplace/enterprise/entities/user";
 
 export class InMemoryUsersRepository implements UsersRepository {
-  public user: User[] = []
+  public user: User[] = [];
 
   async create(user: User): Promise<User> {
-    this.user.push(user)
-    return user
+    this.user.push(user);
+    return user;
   }
 
   async findByEmail(email: string): Promise<User | null> {
-    const user = this.user.find(user => user.email === email)
+    const user = this.user.find((user) => user.email === email);
     if (!user) {
-      return null
+      return null;
     }
-    return user
+    return user;
   }
 
   async findById(id: string): Promise<User | null> {
-    const user = this.user.find(user => user.id.toString() === id)
+    const user = this.user.find((user) => user.id.toString() === id);
     if (!user) {
-      return null
+      return null;
     }
-    return user
+    return user;
   }
 
-  async save<T>(userId: UniqueEntityId, props?: T): Promise<void> {
-    const userIndex = this.user.findIndex(
-      (user) => user.id.toString() === userId.toString()
-    );
+  async save(user: User): Promise<User> {
+    const userIndex = this.user.findIndex((u) => u.id === user.id);
 
-    if (userIndex === -1) {
-      throw new Error("User not found");
+    if (userIndex >= 0) {
+      this.user[userIndex] = user;
     }
 
-    if (props) {
-      Object.assign(this.user[userIndex], props);
-    }
+    return user;
   }
-
 }
