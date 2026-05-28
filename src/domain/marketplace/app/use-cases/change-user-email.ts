@@ -6,15 +6,19 @@ import { left } from "@/core/either";
 import { right } from "@/core/either";
 import { User } from "../../enterprise/entities/user";
 import { SameOldCredentialsError } from "@/core/errors/same-old-credentials-error";
+import { InvalidCredentialError } from "@/core/errors/invalid-credential-error";
 
 export interface ChangeUserEmailUseCaseRequest {
   userId: string;
+  password: string;
   newEmail: string;
-  oldEmail: string;
 }
 
 export type ChangeUserEmailUseCaseResponse = Either<
-  UserAlreadyExistsError | ResourceNotFoundError | SameOldCredentialsError,
+  | UserAlreadyExistsError
+  | ResourceNotFoundError
+  | SameOldCredentialsError
+  | InvalidCredentialError,
   {
     user: User;
   }
@@ -25,8 +29,8 @@ export class ChangeUserEmailUseCase {
 
   async execute({
     userId,
+    password,
     newEmail,
-    oldEmail,
   }: ChangeUserEmailUseCaseRequest): Promise<ChangeUserEmailUseCaseResponse> {
     const user = await this.usersRepository.findById(userId);
 
@@ -34,16 +38,22 @@ export class ChangeUserEmailUseCase {
       return left(new ResourceNotFoundError());
     }
 
-    const isExistingEmail = await this.usersRepository.findByEmail(newEmail);
+    const isCorrectPassword = password === user.password;
 
-    if (isExistingEmail && isExistingEmail.id.toString() !== userId) {
-      return left(new UserAlreadyExistsError());
+    if (!isCorrectPassword) {
+      return left(new InvalidCredentialError());
     }
 
-    const isSameOldEmail = newEmail === oldEmail;
+    const isSameOldEmail = newEmail === user.email;
 
     if (isSameOldEmail) {
       return left(new SameOldCredentialsError());
+    }
+
+    const userWithSameEmail = await this.usersRepository.findByEmail(newEmail);
+
+    if (userWithSameEmail) {
+      return left(new UserAlreadyExistsError());
     }
 
     user.updateEmail(newEmail);

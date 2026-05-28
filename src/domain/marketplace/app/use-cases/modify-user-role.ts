@@ -4,32 +4,29 @@ import { Either, left, right } from "@/core/either";
 import { ResourceNotFoundError } from "@/core/errors/resource-not-found-error";
 
 interface ModifyUserRoleUseCaseRequest {
-    userId: string;
-    role:   Role;
+  userId: string;
+  role: Role;
 }
 
-type ModifyUserRoleUseCaseResponse = Either<ResourceNotFoundError,{
-}>
+type ModifyUserRoleUseCaseResponse = Either<ResourceNotFoundError, {}>;
 
 export class ModifyUserRoleUseCase {
-    constructor(
-    private usersRepository: UsersRepository
-    ){}
+  constructor(private usersRepository: UsersRepository) {}
 
- async execute({
-        userId,
-        role
-    }: ModifyUserRoleUseCaseRequest): Promise<ModifyUserRoleUseCaseResponse>{
-      const user = await this.usersRepository.findById(userId)
+  async execute({
+    userId,
+    role,
+  }: ModifyUserRoleUseCaseRequest): Promise<ModifyUserRoleUseCaseResponse> {
+    const user = await this.usersRepository.findById(userId);
 
-      if(!user){
-        return left(new ResourceNotFoundError())
-      }
-      
-      user.modifyUserRole(role.value)
-      
-      await this.usersRepository.save(user.id, role)
+    if (!user) {
+      return left(new ResourceNotFoundError());
+    }
 
-      return right({})
-    } 
+    user.modifyUserRole(role.value);
+
+    await this.usersRepository.save(user);
+
+    return right({});
+  }
 }
