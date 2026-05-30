@@ -7,6 +7,7 @@ import { right } from "@/core/either";
 import { User } from "../../enterprise/entities/user";
 import { SameOldCredentialsError } from "@/core/errors/same-old-credentials-error";
 import { InvalidCredentialError } from "@/core/errors/invalid-credential-error";
+import { Bcrypt } from "../../infra/cryptography/bcrypt";
 
 export interface ChangeUserEmailUseCaseRequest {
   userId: string;
@@ -25,7 +26,10 @@ export type ChangeUserEmailUseCaseResponse = Either<
 >;
 
 export class ChangeUserEmailUseCase {
-  constructor(private usersRepository: UsersRepository) {}
+  constructor(
+    private usersRepository: UsersRepository,
+    private bcrypt: Bcrypt,
+  ) {}
 
   async execute({
     userId,
@@ -38,7 +42,7 @@ export class ChangeUserEmailUseCase {
       return left(new ResourceNotFoundError());
     }
 
-    const isCorrectPassword = password === user.password;
+    const isCorrectPassword = this.bcrypt.compare(password, user.password);
 
     if (!isCorrectPassword) {
       return left(new InvalidCredentialError());

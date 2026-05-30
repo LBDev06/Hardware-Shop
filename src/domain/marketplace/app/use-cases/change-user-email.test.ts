@@ -2,14 +2,17 @@ import { InMemoryUsersRepository } from "../../../../../test/repo/in-memory-user
 import { beforeEach, describe, it, expect } from "vitest";
 import { makeUser } from "test/factories/makeUser";
 import { ChangeUserEmailUseCase } from "./change-user-email";
+import { FakeBcrypt } from "test/repo/fake-bcrypt";
 
 let inMemoryUsersRepository: InMemoryUsersRepository;
+let fakeBcrypt: FakeBcrypt;
 let sut: ChangeUserEmailUseCase;
 
 describe("Change Email Use Case", () => {
   beforeEach(() => {
     inMemoryUsersRepository = new InMemoryUsersRepository();
-    sut = new ChangeUserEmailUseCase(inMemoryUsersRepository);
+    fakeBcrypt = new FakeBcrypt();
+    sut = new ChangeUserEmailUseCase(inMemoryUsersRepository, fakeBcrypt);
   });
 
   it("should be able to change email.", async () => {
