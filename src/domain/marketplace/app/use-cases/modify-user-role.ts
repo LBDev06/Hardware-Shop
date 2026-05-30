@@ -1,11 +1,10 @@
 import { UsersRepository } from "../repo/users-repository";
-import { Role } from "../../enterprise/value-objects/role";
 import { Either, left, right } from "@/core/either";
 import { ResourceNotFoundError } from "@/core/errors/resource-not-found-error";
 
 interface ModifyUserRoleUseCaseRequest {
   userId: string;
-  role: Role;
+  role: string;
 }
 
 type ModifyUserRoleUseCaseResponse = Either<ResourceNotFoundError, {}>;
@@ -23,7 +22,7 @@ export class ModifyUserRoleUseCase {
       return left(new ResourceNotFoundError());
     }
 
-    user.modifyUserRole(role.value);
+    user.modifyUserRole(role);
 
     await this.usersRepository.save(user);
 
