@@ -2,7 +2,6 @@ import { UsersRepository } from "@/domain/marketplace/app/repo/users-repository"
 import { db } from "../libs/prisma";
 import { PrismaUserMapper } from "@/infra/db/mappers/prisma-user-mapper";
 import { User } from "@/domain/marketplace/enterprise/entities/user";
-import { UniqueEntityId } from "@/core/unique-entity-id";
 
 export class PrismaUsersRepository implements UsersRepository {
   async create(user: User): Promise<User> {
@@ -31,6 +30,8 @@ export class PrismaUsersRepository implements UsersRepository {
         id: id,
       },
     });
+
+    if (!userId) return null;
 
     return PrismaUserMapper.toDomain(userId);
   }

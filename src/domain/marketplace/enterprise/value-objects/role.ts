@@ -1,24 +1,23 @@
-
 export class Role {
-    static readonly Client = new Role('client')
-    static  readonly Seller = new Role('seller')
+  static readonly Client = new Role("Client");
+  static readonly Seller = new Role("Seller");
 
-    public readonly value :string
+  public readonly value: string;
 
-    private constructor (value: string){
-        this.value = value
-        Object.freeze(this)
+  private constructor(value: string) {
+    this.value = value;
+    Object.freeze(this);
+  }
+
+  public static fromString(roleReceived: string) {
+    const role = roleReceived.toLowerCase();
+    if (role === "client") {
+      return new Role(Role.Client.value);
     }
-   
-    public static fromString(roleReceived: string){
-        if(roleReceived === 'client'){
-            return new Role(Role.Client.value)
-        }
-        if(roleReceived === 'seller'){
-            return new Role(Role.Seller.value)
-        } else {
-            throw new Error(`Invalid role ${roleReceived}`)
-        }
+    if (role === "seller") {
+      return new Role(Role.Seller.value);
+    } else {
+      throw new Error(`Invalid role ${roleReceived}`);
     }
-
+  }
 }
