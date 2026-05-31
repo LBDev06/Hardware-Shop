@@ -31,7 +31,7 @@ export class ListSellerProductQuestionsUseCase {
             return left(new ResourceNotFoundError())
         }
 
-        if (user.role.value !== 'seller') {
+        if (user.role.value !== 'Seller') {
             return left(new UserNotAllowedError())
         }
 

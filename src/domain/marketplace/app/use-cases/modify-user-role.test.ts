@@ -23,7 +23,7 @@ describe("Register Use Case", () => {
     });
 
     expect(changeRole).toBeRight();
-    expect(inMemoryUsersRepository.user[0].role.value).toBe("seller");
+    expect(inMemoryUsersRepository.user[0].role.value).toBe("Seller");
   });
 
   it("should not be able not modify user role with ivalid user id", async () => {
