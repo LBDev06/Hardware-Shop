@@ -20,14 +20,21 @@ export async function loginUser(req: FastifyRequest, reply: FastifyReply) {
       password,
     });
 
-    if (result.isRight())
-      return reply.status(200).send({
-        user: UserPresenter.toHTTP(result.value.user),
-      });
-
     if (result.isLeft()) {
       return HttpLoginErrorPresenter.toHTTP(result.value, reply);
     }
+
+    const token = await reply.jwtSign(
+      {},
+      {
+        sign: {
+          sub: result.value.user.id.toString(),
+        },
+      },
+    );
+    return reply.status(200).send({
+      token,
+    });
   } catch (error) {
     return reply.status(500).send({
       message: `${error}`,
