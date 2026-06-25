@@ -1,10 +1,9 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import z from "zod";
 import { makeLoginUserUseCase } from "../factories/make-login-user-use-case";
-import { UserPresenter } from "../presenters/user-presenter";
 import { HttpLoginErrorPresenter } from "../presenters/error/http-login-presenter-error";
 
-export async function loginUser(req: FastifyRequest, reply: FastifyReply) {
+export async function loginUserController(req: FastifyRequest, reply: FastifyReply) {
   const loginUserSchema = z.object({
     email: z.string().email(),
     password: z.string().min(6),

@@ -3,7 +3,7 @@ import z from "zod";
 import { makeChangeUserPasswordUseCase } from "../factories/make-change-user-password-use-case";
 import { HttpChangePasswordErrorPresenter } from "../presenters/error/http-change-password-presenter-error";
 
-export async function changeUserPassword(
+export async function changeUserPasswordController(
   req: FastifyRequest,
   reply: FastifyReply,
 ) {

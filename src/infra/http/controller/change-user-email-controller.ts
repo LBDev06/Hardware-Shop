@@ -4,7 +4,7 @@ import { makeChangeUserEmailUseCase } from "../factories/make-change-user-email-
 import { HttpChangeEmailErrorPresenter } from "../presenters/error/http-change-email-presenter-error";
 import { UserPresenter } from "../presenters/user-presenter";
 
-export async function changeUserEmail(
+export async function changeUserEmailController(
   req: FastifyRequest,
   reply: FastifyReply,
 ) {

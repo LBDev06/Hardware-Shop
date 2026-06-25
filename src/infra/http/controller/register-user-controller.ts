@@ -4,7 +4,7 @@ import { makeRegisterUserUseCase } from "../factories/make-register-user-use-cas
 import { UserPresenter } from "@/infra/http/presenters/user-presenter";
 import { HttpRegisterErrorPresenter } from "@/infra/http/presenters/error/http-register-presenter-error";
 
-export async function registerUser(req: FastifyRequest, reply: FastifyReply) {
+export async function registerUserController(req: FastifyRequest, reply: FastifyReply) {
   const registerUserSchema = z.object({
     name: z.string().max(50),
     email: z.string().email(),

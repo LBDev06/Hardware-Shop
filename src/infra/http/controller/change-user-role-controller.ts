@@ -3,7 +3,7 @@ import z from "zod";
 import { makeModifyUserRoleUseCase } from "../factories/make-modify-user-role-use-case";
 import { HttpChangeRoleErrorPresenter } from "../presenters/error/http-change-role-presenter-error";
 
-export async function changeUserRole(req: FastifyRequest, reply: FastifyReply) {
+export async function changeUserRoleController(req: FastifyRequest, reply: FastifyReply) {
   const idSchema = z.string().uuid()
 
   const changeUserRoleSchema = z.object({
