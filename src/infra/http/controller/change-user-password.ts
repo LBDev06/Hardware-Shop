@@ -7,16 +7,14 @@ export async function changeUserPassword(
   req: FastifyRequest,
   reply: FastifyReply,
 ) {
-  const changeUserPasswordParamsSchema = z.object({
-    id: z.string().uuid(),
-  });
+  const idSchema = z.string().uuid()
 
   const changeUserPasswordBodySchema = z.object({
     oldPassword: z.string().min(6),
     newPassword: z.string().min(6),
   });
-
-  const { id } = changeUserPasswordParamsSchema.parse(req.params);
+  
+  const id = idSchema.parse(req.userId)
   const { oldPassword, newPassword } = changeUserPasswordBodySchema.parse(
     req.body,
   );

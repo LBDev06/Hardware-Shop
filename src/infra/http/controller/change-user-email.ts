@@ -8,16 +8,15 @@ export async function changeUserEmail(
   req: FastifyRequest,
   reply: FastifyReply,
 ) {
-  const changeUserEmailParamsSchema = z.object({
-    id: z.string().uuid(),
-  });
+
+  const idSchema = z.string().uuid()
 
   const changeUserEmailSchema = z.object({
     password: z.string().min(6),
     newEmail: z.string().email(),
   });
-
-  const { id } = changeUserEmailParamsSchema.parse(req.params);
+   
+  const id = idSchema.parse(req.userId)
   const { password, newEmail } = changeUserEmailSchema.parse(req.body);
 
   try {

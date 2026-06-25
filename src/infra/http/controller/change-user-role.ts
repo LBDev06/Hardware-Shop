@@ -4,15 +4,13 @@ import { makeModifyUserRoleUseCase } from "../factories/make-modify-user-role-us
 import { HttpChangeRoleErrorPresenter } from "../presenters/error/http-change-role-presenter-error";
 
 export async function changeUserRole(req: FastifyRequest, reply: FastifyReply) {
-  const changeUserRoleParamsSchema = z.object({
-    id: z.string().uuid(),
-  });
+  const idSchema = z.string().uuid()
 
   const changeUserRoleSchema = z.object({
     role: z.string(),
   });
-
-  const { id } = changeUserRoleParamsSchema.parse(req.params);
+   
+  const id = idSchema.parse(req.userId)
   const { role } = changeUserRoleSchema.parse(req.body);
 
   try {
