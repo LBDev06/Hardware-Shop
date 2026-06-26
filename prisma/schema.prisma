@@ -25,4 +25,26 @@ model User {
   password  String
   role      Role     @default(Client)
   createdAt DateTime @default(now())
+  user      Product[]
+}
+
+model Product{
+   id           String   @id @default(uuid())
+   authorId     String
+   name         String
+   price        Int
+   stock        Int
+   description  String  
+   category     String
+   specs        Json
+   createdAt    DateTime @default(now())
+   user         User @relation(fields: [authorId], references: [id])
+   attachments  ProductAttachment[]
+}
+
+model ProductAttachment {
+    id         String  @id @default(uuid())
+    productId  String
+    url        String
+    product    Product @relation(fields: [productId], references: [id])
 }
