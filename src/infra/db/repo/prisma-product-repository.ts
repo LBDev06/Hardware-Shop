@@ -70,6 +70,22 @@ export class PrismaProductRespository implements ProductRepository {
     }
 
     async findManyProductsBySellerId(sellerId: string, params: PaginationParams): Promise<Product[] | null> {
-      
+      const products = await db.product.findMany({
+        where: {
+          authorId: sellerId,
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+        skip: (params.page - 1) * 20,
+        take: 20,
+        include: {
+          attachments: true,
+        },
+      })
+
+      if (products.length === 0) return null
+
+      return products.map(PrismaProductMapper.toDomain)
     }
 }

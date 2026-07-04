@@ -31,7 +31,7 @@ describe('List Seller Products Use Case', () => {
         await inMemoryProductsRepository.create(product)
         await inMemoryProductsRepository.create(product)
 
-        const result = await sut.executer({
+        const result = await sut.execute({
             userId: user.id.toString(),
             page: 1
         })
@@ -55,7 +55,7 @@ describe('List Seller Products Use Case', () => {
             await inMemoryProductsRepository.create(product)
         }
 
-        const result = await sut.executer({
+        const result = await sut.execute({
             userId: user.id.toString(),
             page: 2
         })

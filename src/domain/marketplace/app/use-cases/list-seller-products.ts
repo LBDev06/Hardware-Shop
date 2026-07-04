@@ -16,7 +16,7 @@ export class ListSellerPoductsUseCase {
         private productsRepository: ProductRepository
     ) { }
 
-    async executer({
+    async execute({
         page,
         userId
     }: ListSellerPoductsUseCaseRequest): Promise<ListSellerPoductsUseCaseResponse> {

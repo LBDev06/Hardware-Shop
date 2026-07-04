@@ -4,13 +4,9 @@ import { verifyJwt } from "../middleware/verify-jwt";
 import { createProductController } from "../controller/create-product-controller";
 import { deleteProductController } from "../controller/delete-product-controller";
 import { listProductController } from "../controller/list-product-controller";
+import { listSellerProductController } from "../controller/list-seller-product-controller";
 
 export function productRoutes(app: FastifyInstance) {
-  app.get(
-    "/product/list",
-    listProductController
-  );
-
   app.post(
     "/product/create",
     { onRequest: [verifyJwt, loginRequired] },
@@ -21,4 +17,14 @@ export function productRoutes(app: FastifyInstance) {
     { onRequest: [verifyJwt, loginRequired] },
     deleteProductController
   );
+    app.get(
+    "/product/list",
+    listProductController
+  );
+    app.get(
+    "/product/by-seller",
+    { onRequest: [verifyJwt, loginRequired] },
+    listSellerProductController
+  );
+
 }
