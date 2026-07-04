@@ -66,7 +66,24 @@ export class PrismaProductRespository implements ProductRepository {
     }
 
     async searchProduct(query: string): Promise<Product[] | null> {
-      
+      const products = await db.product.findMany({
+        where: {
+          name: {
+            contains: query,
+            mode: "insensitive",
+          },
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+        include: {
+          attachments: true,
+        },
+      })
+
+      if (products.length === 0) return null
+
+      return products.map(PrismaProductMapper.toDomain)
     }
 
     async findManyProductsBySellerId(sellerId: string, params: PaginationParams): Promise<Product[] | null> {
