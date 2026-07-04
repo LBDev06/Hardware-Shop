@@ -54,6 +54,6 @@ model ProductAttachment {
     productId     String
     attachmentId  String
 
-    product       Product    @relation(fields: [productId], references: [id])
-    attachment    Attachment @relation(fields: [attachmentId], references: [id])
+    product       Product    @relation(fields: [productId], references: [id], onDelete: Cascade)
+    attachment    Attachment @relation(fields: [attachmentId], references: [id], onDelete: Cascade)
 }

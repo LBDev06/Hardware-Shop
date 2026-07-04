@@ -18,13 +18,24 @@ export class PrismaProductRespository implements ProductRepository {
   include: {
     attachments: true,
   },
-        })
+  })
 
         return PrismaProductMapper.toDomain(createProduct)
     }
 
     async findById(id: string): Promise<Product | null> {
-      
+      const productId = await db.product.findUnique({
+        where:{
+          id: id
+        },
+        include:{
+          attachments: true
+        }
+      })
+
+      if (!productId) return null
+
+      return PrismaProductMapper.toDomain(productId)
     }
 
     async save(product: Product): Promise<void> {
@@ -32,7 +43,11 @@ export class PrismaProductRespository implements ProductRepository {
     }
 
     async delete(product: string): Promise<void> {
-      
+      await db.product.delete({
+        where: {
+          id: product,
+        },
+      })
     }
 
     async findManyProducts(params: PaginationParams): Promise<Product[]> {

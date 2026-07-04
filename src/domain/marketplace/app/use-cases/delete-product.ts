@@ -33,7 +33,8 @@ export class DeleteProductUseCase {
     return left(new ResourceNotFoundError())
   }
 
-  if(product.authorId !== user.id){
+  if(product.authorId.toString() !== user.id.toString()){
+    console.log(`este e o productId: ${product.authorId}  e este e o userId: ${user}`)
     return left(new UserNotAllowedError())
   }
 
