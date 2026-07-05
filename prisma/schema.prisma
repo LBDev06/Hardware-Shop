@@ -26,6 +26,7 @@ model User {
   role      Role     @default(Client)
   createdAt DateTime @default(now())
   user      Product[]
+  questions Question[]
 }
 
 model Attachment {
@@ -47,6 +48,18 @@ model Product{
    createdAt    DateTime @default(now())
    user         User @relation(fields: [authorId], references: [id])
    attachments  ProductAttachment[]
+   questions    Question[]
+}
+
+model Question {
+  id        String   @id @default(uuid())
+  productId String
+  authorId  String
+  content   String
+  createdAt DateTime @default(now())
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [authorId], references: [id], onDelete: Cascade)
 }
 
 model ProductAttachment {
