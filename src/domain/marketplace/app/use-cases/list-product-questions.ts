@@ -1,8 +1,6 @@
 import { left, right } from "@/core/either";
 import { ResourceNotFoundError } from "@/core/errors/resource-not-found-error";
 import { Either } from "@/core/either";
-import { UsersRepository } from "../repo/users-repository";
-import { UserNotAllowedError } from "@/core/errors/user-not-allowed-error";
 import { Question } from "../../enterprise/entities/question";
 import { QuestionRepository } from "../repo/question-repository";
 import { ProductRepository } from "../repo/product-repository";
@@ -12,7 +10,7 @@ interface ListProductQuestionsUseCaseRequest {
     page: number
 }
 
-type ListProductQuestionsUseCaseResponse = Either<ResourceNotFoundError | UserNotAllowedError, {
+type ListProductQuestionsUseCaseResponse = Either<ResourceNotFoundError, {
     questions: Question[]
 }>
 

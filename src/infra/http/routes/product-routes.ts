@@ -7,6 +7,7 @@ import { listProductController } from "../controller/list-product-controller";
 import { listSellerProductController } from "../controller/list-seller-product-controller";
 import { searchProductController } from "../controller/search-product-controller";
 import { createQuestionController } from "../controller/create-question-controller";
+import { listProductQuestionsController } from "../controller/list-product-questions-controller";
 
 export function productRoutes(app: FastifyInstance) {
   app.post(
@@ -39,5 +40,9 @@ export function productRoutes(app: FastifyInstance) {
     "/product/:productId/question",
     { onRequest: [verifyJwt, loginRequired] },
     createQuestionController,
+  );
+    app.get(
+    "/product/:productId/questions",
+    listProductQuestionsController,
   );
 }
