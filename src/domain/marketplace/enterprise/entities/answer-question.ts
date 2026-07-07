@@ -18,6 +18,10 @@ export class AnswerQuestion extends AggregateRoot<AnswerQuestionProps> {
         return this.props.authorId
     }
 
+    get productId() {
+        return this.props.productId
+    }
+
     get content() {
         return this.props.content
     }

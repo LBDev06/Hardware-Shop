@@ -27,6 +27,7 @@ model User {
   createdAt DateTime @default(now())
   user      Product[]
   questions Question[]
+  answers   Answer[]
 }
 
 model Attachment {
@@ -49,6 +50,7 @@ model Product{
    user         User @relation(fields: [authorId], references: [id])
    attachments  ProductAttachment[]
    questions    Question[]
+   answers      Answer[]
 }
 
 model Question {
@@ -60,6 +62,21 @@ model Question {
 
   product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
   user    User    @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  answers Answer[]
+}
+
+model Answer {
+  id         String   @id @default(uuid())
+  authorId   String
+  productId  String
+  questionId String
+  content    String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  author   User    @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  product  Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  question Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
 }
 
 model ProductAttachment {
