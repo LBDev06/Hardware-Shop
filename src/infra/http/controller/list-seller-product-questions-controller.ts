@@ -1,7 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import z from "zod";
 import { makeListSellerProductQuestionsUseCase } from "../factories/make-list-seller-product-questions-use-case";
-import { HttpListSellerProductErrorPresenter } from "../presenters/error/http-list-seller-product-questions-error";
+import { HttpErrorPresenter } from "../presenters/error/http-error-presenter";
 import { QuestionPresenter } from "../presenters/question-presenter";
 
 export async function listSellerProductQuestionsController(
@@ -26,7 +26,7 @@ export async function listSellerProductQuestionsController(
     });
 
     if (result.isLeft()) {
-      return HttpListSellerProductErrorPresenter.toHTTP(result.value, reply);
+      return HttpErrorPresenter.toHTTP(result.value, reply);
     }
 
     return reply.status(200).send({

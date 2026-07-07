@@ -2,7 +2,7 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import z from "zod";
 import { makeRegisterUserUseCase } from "../factories/make-register-user-use-case";
 import { UserPresenter } from "@/infra/http/presenters/user-presenter";
-import { HttpRegisterErrorPresenter } from "@/infra/http/presenters/error/http-register-presenter-error";
+import { HttpErrorPresenter } from "@/infra/http/presenters/error/http-error-presenter";
 
 export async function registerUserController(req: FastifyRequest, reply: FastifyReply) {
   const registerUserSchema = z.object({
@@ -28,7 +28,7 @@ export async function registerUserController(req: FastifyRequest, reply: Fastify
     }
 
     if (result.isLeft()) {
-      return HttpRegisterErrorPresenter.toHTTP(result.value, reply);
+      return HttpErrorPresenter.toHTTP(result.value, reply);
     }
   } catch (error) {
     return reply.status(500).send({

@@ -1,7 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify"
 import z from "zod"
 import { makeListProductQuestionsCreateUseCase } from "../factories/make-list-prroduct-questions";
-import { HttpListProductQuestionsErrorPresenter } from "../presenters/error/http-list-product-questions-presenter-error";
+import { HttpErrorPresenter } from "../presenters/error/http-error-presenter";
 import { QuestionPresenter } from "../presenters/question-presenter";
 
 export async function listProductQuestionsController(req: FastifyRequest, reply: FastifyReply){
@@ -25,7 +25,7 @@ export async function listProductQuestionsController(req: FastifyRequest, reply:
         })
 
         if(result.isLeft()){
-          return HttpListProductQuestionsErrorPresenter.toHTTP(result.value, reply)
+          return HttpErrorPresenter.toHTTP(result.value, reply)
         }
 
        return reply.status(200).send({

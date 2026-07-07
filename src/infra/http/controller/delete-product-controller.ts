@@ -1,7 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import z from "zod";
 import { makeDeleteProductUseCase } from "../factories/make-delete-product-use-case";
-import { HttpDeleteProductErrorPresenter } from "../presenters/error/http-delete-product-presenter-error";
+import { HttpErrorPresenter } from "../presenters/error/http-error-presenter";
 
 export async function deleteProductController(req: FastifyRequest, reply: FastifyReply){
     const authorIdSchema = z.string().uuid()
@@ -22,7 +22,7 @@ export async function deleteProductController(req: FastifyRequest, reply: Fastif
         })
 
      if(result.isLeft()){
-      return  HttpDeleteProductErrorPresenter.toHTTP(result.value, reply)
+      return HttpErrorPresenter.toHTTP(result.value, reply)
      }
     return reply.status(201).send({
     message: "Product deleted."

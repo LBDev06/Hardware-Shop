@@ -1,7 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import z from "zod";
 import { makeLoginUserUseCase } from "../factories/make-login-user-use-case";
-import { HttpLoginErrorPresenter } from "../presenters/error/http-login-presenter-error";
+import { HttpErrorPresenter } from "../presenters/error/http-error-presenter";
 
 export async function loginUserController(req: FastifyRequest, reply: FastifyReply) {
   const loginUserSchema = z.object({
@@ -20,7 +20,7 @@ export async function loginUserController(req: FastifyRequest, reply: FastifyRep
     });
 
     if (result.isLeft()) {
-      return HttpLoginErrorPresenter.toHTTP(result.value, reply);
+      return HttpErrorPresenter.toHTTP(result.value, reply);
     }
 
     const token = await reply.jwtSign(

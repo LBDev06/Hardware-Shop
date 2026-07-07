@@ -1,7 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import z from "zod";
 import { makeChangeUserEmailUseCase } from "../factories/make-change-user-email-use-case";
-import { HttpChangeEmailErrorPresenter } from "../presenters/error/http-change-email-presenter-error";
+import { HttpErrorPresenter } from "../presenters/error/http-error-presenter";
 import { UserPresenter } from "../presenters/user-presenter";
 
 export async function changeUserEmailController(
@@ -29,7 +29,7 @@ export async function changeUserEmailController(
     });
 
     if (result.isLeft()) {
-      return HttpChangeEmailErrorPresenter.toHTTP(result.value, reply);
+      return HttpErrorPresenter.toHTTP(result.value, reply);
     }
 
     return reply.status(201).send({

@@ -1,7 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import z from "zod";
 import { makeModifyUserRoleUseCase } from "../factories/make-modify-user-role-use-case";
-import { HttpChangeRoleErrorPresenter } from "../presenters/error/http-change-role-presenter-error";
+import { HttpErrorPresenter } from "../presenters/error/http-error-presenter";
 
 export async function changeUserRoleController(req: FastifyRequest, reply: FastifyReply) {
   const idSchema = z.string().uuid()
@@ -22,7 +22,7 @@ export async function changeUserRoleController(req: FastifyRequest, reply: Fasti
     });
 
     if (result.isLeft()) {
-      return HttpChangeRoleErrorPresenter.toHTTP(result.value, reply);
+      return HttpErrorPresenter.toHTTP(result.value, reply);
     }
 
     return reply.status(200).send({ message: "Change role successfuly" });

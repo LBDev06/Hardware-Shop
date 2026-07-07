@@ -1,7 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import z from "zod";
 import { makeChangeUserPasswordUseCase } from "../factories/make-change-user-password-use-case";
-import { HttpChangePasswordErrorPresenter } from "../presenters/error/http-change-password-presenter-error";
+import { HttpErrorPresenter } from "../presenters/error/http-error-presenter";
 
 export async function changeUserPasswordController(
   req: FastifyRequest,
@@ -29,7 +29,7 @@ export async function changeUserPasswordController(
     });
 
     if (result.isLeft()) {
-      return HttpChangePasswordErrorPresenter.toHTTP(result.value, reply);
+      return HttpErrorPresenter.toHTTP(result.value, reply);
     }
     return reply.status(200).send({ message: "Password change successfully" });
   } catch (error) {

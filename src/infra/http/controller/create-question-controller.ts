@@ -1,7 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import z from "zod";
 import { makeCreateQuestionUseCase } from "../factories/make-create-question-use-case";
-import { HttpCreateQuestionErrorPresenter } from "../presenters/error/http-create-question-presenter-error";
+import { HttpErrorPresenter } from "../presenters/error/http-error-presenter";
 
 export async function createQuestionController(req: FastifyRequest, reply: FastifyReply){
     const idSchema = z.string().uuid()
@@ -28,7 +28,7 @@ export async function createQuestionController(req: FastifyRequest, reply: Fasti
         })
        
         if(result.isLeft()){
-            return HttpCreateQuestionErrorPresenter.toHTTP(result.value, reply) 
+            return HttpErrorPresenter.toHTTP(result.value, reply) 
         }
      
         return reply.status(201).send({message:"Question created."})

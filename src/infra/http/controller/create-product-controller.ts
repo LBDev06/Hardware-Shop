@@ -1,7 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import z from "zod";
 import { makeCreateProductUseCase } from "../factories/make-create-product-use-case";
-import { HttpCreateProductErrorPresenter } from "../presenters/error/http-create-product-error-presenter";
+import { HttpErrorPresenter } from "../presenters/error/http-error-presenter";
 import { ProductPresenter } from "../presenters/product-presenter";
 
 export async function createProductController(req: FastifyRequest, reply: FastifyReply){
@@ -35,7 +35,7 @@ export async function createProductController(req: FastifyRequest, reply: Fastif
     })
 
     if(result.isLeft()){
-     return HttpCreateProductErrorPresenter.toHTTP(result.value, reply)
+     return HttpErrorPresenter.toHTTP(result.value, reply)
     }
 
    return reply.status(201).send({
