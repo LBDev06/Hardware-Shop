@@ -10,6 +10,7 @@ import { createQuestionController } from "../controller/create-question-controll
 import { listProductQuestionsController } from "../controller/list-product-questions-controller";
 import { listSellerProductQuestionsController } from "../controller/list-seller-product-questions-controller";
 import { deleteQuestionProductController } from "../controller/delete-question-product-controller";
+import { editProductQuestionController } from "../controller/edit-product-question-controller";
 
 export function productRoutes(app: FastifyInstance) {
   app.post(
@@ -47,7 +48,12 @@ export function productRoutes(app: FastifyInstance) {
     "/product/:productId/questions",
     listProductQuestionsController,
   );
-    app.delete(
+    app.put(
+    "/product/questions/:questionId/edit",
+    { onRequest: [verifyJwt, loginRequired] },
+    editProductQuestionController,
+  );
+  app.delete(
     "/product/questions/:questionId/delete",
     { onRequest: [verifyJwt, loginRequired] },
     deleteQuestionProductController,
