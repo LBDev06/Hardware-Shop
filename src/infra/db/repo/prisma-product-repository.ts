@@ -5,6 +5,27 @@ import { PrismaProductMapper } from "../mappers/prisma-product-mapper";
 import { PaginationParams } from "@/core/repo/pagination-params";
 
 export class PrismaProductRespository implements ProductRepository {
+    async save(product: Product): Promise<void> {
+      const data = PrismaProductMapper.toPrisma(product)
+
+      await db.product.update({
+        where: {
+          id: product.id.toString(),
+        },
+        data: {
+          ...data,
+          attachments: {
+            create: product.attachments.getNewItems().map((attachment) => ({
+              attachmentId: attachment.attachmentId.toString(),
+            })),
+            deleteMany: product.attachments.getRemovedItems().map((attachment) => ({
+              attachmentId: attachment.attachmentId.toString(),
+            })),
+          },
+        },
+      })
+    }
+
     async create(product: Product): Promise<Product> {
         const createProduct = await db.product.create({
            data: {
@@ -38,9 +59,6 @@ export class PrismaProductRespository implements ProductRepository {
       return PrismaProductMapper.toDomain(productId)
     }
 
-    async save(product: Product): Promise<void> {
-      
-    }
 
     async delete(product: string): Promise<void> {
       await db.product.delete({

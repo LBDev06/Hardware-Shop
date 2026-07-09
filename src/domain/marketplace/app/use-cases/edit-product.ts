@@ -55,11 +55,11 @@ export class EditProductUseCase {
       return left(new ResourceNotFoundError());
     }
 
-    if (product.authorId !== user.id) {
+    if (product.authorId.toString() !== user.id.toString()) {
       return left(new UserNotAllowedError());
     }
 
-    if (category !== product.category.value && !specs) {
+    if (category && category !== product.category.value && !specs) {
       return left(new RequiredUpdateFieldError());
     }
 
