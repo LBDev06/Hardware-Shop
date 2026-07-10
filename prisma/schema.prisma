@@ -28,6 +28,7 @@ model User {
   user      Product[]
   questions Question[]
   answers   Answer[]
+  cart      Cart?
 }
 
 model Attachment {
@@ -50,7 +51,30 @@ model Product{
    user         User @relation(fields: [authorId], references: [id])
    attachments  ProductAttachment[]
    questions    Question[]
-   answers      Answer[]
+    answers      Answer[]
+    cartProducts CartProduct[]
+}
+
+model Cart {
+  id     String @id @default(uuid())
+  userId String @unique
+
+  user  User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items CartProduct[]
+}
+
+model CartProduct {
+  id        String @id @default(uuid())
+  cartId    String
+  productId String
+  name      String
+  quantity  Int
+  price     Int
+
+  cart    Cart    @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([cartId, productId])
 }
 
 model Question {
