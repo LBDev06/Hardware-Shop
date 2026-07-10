@@ -73,7 +73,7 @@ export function productRoutes(app: FastifyInstance) {
     { onRequest: [verifyJwt, loginRequired] },
     listSellerProductQuestionsController,
   );
-   app.delete(
+     app.delete(
     "/product/answers/:answerId/delete",
     { onRequest: [verifyJwt, loginRequired] },
     deleteAnswerQuestionController,
