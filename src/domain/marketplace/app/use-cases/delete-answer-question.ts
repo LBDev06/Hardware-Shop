@@ -2,7 +2,7 @@ import { UserNotAllowedError } from "@/core/errors/user-not-allowed-error";
 import { ResourceNotFoundError } from "@/core/errors/resource-not-found-error";
 import { Either } from "@/core/either";
 import { AnswerQuestionRepository } from "../repo/answer-question-repository";
-import { left, right } from "@/core/either";
+import { left, right } from "@/core/either";1
 
 interface DeleteAnswerQuestionUseCaseRequest {
     authorId: string;

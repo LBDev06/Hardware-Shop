@@ -15,6 +15,7 @@ import { createAnswerQuestionController } from "../controller/create-answer-ques
 import { editAnswerQuestionController } from "../controller/edit-answer-question-controller";
 import { editProductController } from "../controller/edit-product-controller";
 import { deleteAnswerQuestionController } from "../controller/delete-answer-question-controller";
+import { listAnswersByProductQuestionsController } from "../controller/list-answers-by-product-questions-controller";
 
 export function productRoutes(app: FastifyInstance) {
   app.post(
@@ -48,6 +49,9 @@ export function productRoutes(app: FastifyInstance) {
     createQuestionController,
   );
   app.get("/product/:productId/questions", listProductQuestionsController);
+
+  app.get("/product/questions/:questionId/answers", listAnswersByProductQuestionsController);
+  
   app.put(
     "/product/questions/:questionId/edit",
     { onRequest: [verifyJwt, loginRequired] },
