@@ -28,6 +28,7 @@ describe('Delete Product From Cart Use Case', () => {
 
         const cartProduct = CartProduct.create({
             productId: new UniqueEntityId('product-1'),
+            name: 'Mouse',
             price: 1000,
             quantity: 2
         })

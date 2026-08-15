@@ -4,17 +4,27 @@ import { AnswerQuestionRepository } from "@/domain/marketplace/app/repo/answer-q
 import { AnswerQuestion } from "@/domain/marketplace/enterprise/entities/answer-question";
 import { db } from "../libs/prisma";
 import { PrismaAnswerMapper } from "../mappers/prisma-answer-mapper";
+import { OutboxEventMapper } from "../outbox/outbox-event-mapper";
 
 export class PrismaAnswerRepository implements AnswerQuestionRepository {
     async save(answerQuestion: AnswerQuestion): Promise<void> {
         const data = PrismaAnswerMapper.toPrisma(answerQuestion)
 
-        await db.answer.upsert({
-            where: {
-                id: answerQuestion.id.toString(),
-            },
-            create: data,
-            update: data,
+        await db.$transaction(async (tx) => {
+            await tx.answer.upsert({
+                where: {
+                    id: answerQuestion.id.toString(),
+                },
+                create: data,
+                update: data,
+            })
+
+            for (const event of answerQuestion.domainEvents) {
+                const outboxData = OutboxEventMapper.toOutbox(event)
+                await tx.outbox.create({
+                    data: outboxData,
+                })
+            }
         })
 
         DomainEvents.dispatchEventsForAggregate(answerQuestion.id)

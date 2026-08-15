@@ -1,20 +1,33 @@
+import { DomainEvents } from "@/core/events/domain-events";
 import { QuestionRepository } from "@/domain/marketplace/app/repo/question-repository";
 import { Question } from "@/domain/marketplace/enterprise/entities/question";
 import { db } from "../libs/prisma";
 import { PrismaQuestionMapper } from "../mappers/prisma-question-mapper";
+import { OutboxEventMapper } from "../outbox/outbox-event-mapper";
 import { PaginationParams } from "@/core/repo/pagination-params";
 
 export class PrismaQuestionRepository implements QuestionRepository {
     async save(question: Question): Promise<void> {
         const data = PrismaQuestionMapper.toPrisma(question);
 
-        await db.question.upsert({
-            where: {
-                id: question.id.toString(),
-            },
-            create: data,
-            update: data,
+        await db.$transaction(async (tx) => {
+            await tx.question.upsert({
+                where: {
+                    id: question.id.toString(),
+                },
+                create: data,
+                update: data,
+            });
+
+            for (const event of question.domainEvents) {
+                const outboxData = OutboxEventMapper.toOutbox(event);
+                await tx.outbox.create({
+                    data: outboxData,
+                });
+            }
         });
+
+        DomainEvents.dispatchEventsForAggregate(question.id);
     }
 
     async findById(id: string): Promise<Question | null> {

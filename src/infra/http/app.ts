@@ -6,8 +6,11 @@ import { env } from "./env";
 import fastifyJwt from "@fastify/jwt";
 import { productRoutes } from "./routes/product-routes";
 import { cartRoutes } from "./routes/cart-routes";
+import { registerNotificationSubscribers } from "../events";
 
 export const app = fastify();
+
+registerNotificationSubscribers();
 
 app.register(fastifyJwt, {
   secret: env.JWT_SECRET,

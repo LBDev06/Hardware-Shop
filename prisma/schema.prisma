@@ -29,6 +29,7 @@ model User {
   questions Question[]
   answers   Answer[]
   cart      Cart?
+  notifications Notification[]
 }
 
 model Attachment {
@@ -44,7 +45,7 @@ model Product{
    name         String
    price        Int
    stock        Int
-   description  String  
+   description  String
    category     String
    specs        Json
    createdAt    DateTime @default(now())
@@ -111,3 +112,33 @@ model ProductAttachment {
     product       Product    @relation(fields: [productId], references: [id], onDelete: Cascade)
     attachment    Attachment @relation(fields: [attachmentId], references: [id], onDelete: Cascade)
 }
+
+enum EventType {
+  QUESTION_CREATED
+  ANSWER_QUESTION_CREATED
+  ORDER_CREATED
+}
+
+model Notification {
+  id          String    @id @default(uuid())
+  recipientId String
+  title       String
+  content     String
+  eventType   EventType
+  createdAt   DateTime  @default(now())
+
+  recipient   User      @relation(fields: [recipientId], references: [id], onDelete: Cascade)
+}
+
+model Outbox {
+  id          String    @id @default(uuid())
+  aggregateId String
+  eventType   String
+  payload     Json
+  publishedAt DateTime?
+  createdAt   DateTime  @default(now())
+
+  @@index([publishedAt])
+}
+
+

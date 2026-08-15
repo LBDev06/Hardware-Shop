@@ -3,6 +3,7 @@ import { OrderItem } from "@/domain/payment/enterprise/entities/order-item";
 
 export function makeOrderItem(
     override: Partial<{
+        clientId: UniqueEntityId
         productId: UniqueEntityId
         productName: string
         quantity: number
@@ -11,6 +12,7 @@ export function makeOrderItem(
     id?: UniqueEntityId
 ) {
     return OrderItem.create({
+        clientId: override.clientId ?? new UniqueEntityId(),
         productId: override.productId ?? new UniqueEntityId(),
         productName: override.productName ?? 'RTX 3060',
         quantity: override.quantity ?? 1,

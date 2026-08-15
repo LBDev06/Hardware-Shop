@@ -65,7 +65,7 @@ export class DomainEvents {
         this.markedAggregates = []
     }
 
-    private static dispatch(event: DomainEvent) {
+    public static dispatch(event: DomainEvent) {
         const eventClassName: string = event.constructor.name
 
         const isEventRegistered = eventClassName in this.handlersMap
