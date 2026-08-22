@@ -6,6 +6,7 @@ import { env } from "./env";
 import fastifyJwt from "@fastify/jwt";
 import { productRoutes } from "./routes/product-routes";
 import { cartRoutes } from "./routes/cart-routes";
+import { notificationRoutes } from "./routes/notification-routes";
 import { registerNotificationSubscribers } from "../events";
 
 export const app = fastify();
@@ -21,3 +22,5 @@ app.register(userRoutes);
 app.register(productRoutes)
 app.register(attachmentRoutes);
 app.register(cartRoutes);
+app.register(notificationRoutes);
+
