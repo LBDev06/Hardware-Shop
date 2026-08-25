@@ -32,6 +32,10 @@ export class Order extends AggregateRoot<OrderProps> {
         return this.props.status
     }
 
+    get createdAt() {
+        return this.props.createdAt
+    }
+
     cancel() {
         this.props.status = 'CANCELED'
     }

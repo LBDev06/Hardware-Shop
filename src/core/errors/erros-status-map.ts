@@ -5,6 +5,7 @@ import { ResourceDoesNotBelongError } from "./resource-does-not-belong-error";
 import { InvalidCredentialError } from "./invalid-credential-error";
 import { UserAlreadyExistsError } from "./user-already-exists-error";
 import { SameOldCredentialsError } from "./same-old-credentials-error";
+import { PaymentDeclinedError } from "./payment-declined-error";
 
 export const errorStatusMap = new Map<Function, number>([
   [ResourceNotFoundError, 404],
@@ -14,4 +15,5 @@ export const errorStatusMap = new Map<Function, number>([
   [InvalidCredentialError, 401],
   [UserAlreadyExistsError, 409],
   [SameOldCredentialsError, 400],
+  [PaymentDeclinedError, 400],
 ]);

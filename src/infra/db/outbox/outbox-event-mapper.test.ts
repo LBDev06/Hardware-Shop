@@ -2,8 +2,12 @@ import { describe, expect, it } from "vitest";
 import { OutboxEventMapper } from "./outbox-event-mapper";
 import { makeQuestion } from "test/factories/makeQuestion";
 import { makeAnswerQuestion } from "test/factories/make-answer";
+import { makeOrder } from "test/factories/make-order";
+import { makeOrderItem } from "test/factories/make-order-item";
 import { QuestionCreatedEvent } from "@/domain/marketplace/enterprise/events/question-created-event";
 import { AnswerQuestionsCreatedEvent } from "@/domain/marketplace/enterprise/events/answer-question-created";
+import { OrderCreatedEvent } from "@/domain/payment/enterprise/events/order-created-event";
+import { UniqueEntityId } from "@/core/unique-entity-id";
 
 describe("OutboxEventMapper", () => {
   it("should serialize QuestionCreatedEvent to outbox format", async () => {
@@ -41,6 +45,29 @@ describe("OutboxEventMapper", () => {
       createdAt: answer.createdAt.toISOString(),
       updatedAt: answer.updatedAt?.toISOString(),
     });
+  });
+
+  it("should serialize OrderCreatedEvent to outbox format", () => {
+    const item = makeOrderItem({
+      clientId: new UniqueEntityId("client-1"),
+      productId: new UniqueEntityId("product-1"),
+      productName: "RTX 4090",
+      quantity: 1,
+      price: 15000,
+    });
+    const order = makeOrder({
+      items: [item],
+    });
+    const event = new OrderCreatedEvent(order);
+
+    const outboxData = OutboxEventMapper.toOutbox(event);
+
+    expect(outboxData.aggregateId).toBe(order.id.toString());
+    expect(outboxData.eventType).toBe("OrderCreatedEvent");
+    expect(outboxData.payload.id).toBe(order.id.toString());
+    expect(outboxData.payload.status).toBe("PENDING");
+    expect(outboxData.payload.items).toHaveLength(1);
+    expect(outboxData.payload.items[0].productName).toBe("RTX 4090");
   });
 
   it("should deserialize QuestionCreatedEvent from outbox format", () => {
@@ -91,5 +118,39 @@ describe("OutboxEventMapper", () => {
     expect(domainEvent.answerQuestion.id.toString()).toBe("answer-1");
     expect(domainEvent.answerQuestion.questionId.toString()).toBe("question-1");
     expect(domainEvent.answerQuestion.content).toBe("Sim, é bivolt automático.");
+  });
+
+  it("should deserialize OrderCreatedEvent from outbox format", () => {
+    const rawOutbox = {
+      id: "outbox-3",
+      aggregateId: "order-1",
+      eventType: "OrderCreatedEvent",
+      payload: {
+        id: "order-1",
+        status: "PENDING",
+        createdAt: new Date("2026-08-15T18:00:00Z").toISOString(),
+        items: [
+          {
+            id: "item-1",
+            clientId: "client-1",
+            productId: "product-1",
+            productName: "RTX 4090",
+            quantity: 1,
+            price: 15000,
+          },
+        ],
+      },
+      publishedAt: null,
+      createdAt: new Date(),
+    };
+
+    const domainEvent = OutboxEventMapper.toDomainEvent(rawOutbox) as OrderCreatedEvent;
+
+    expect(domainEvent).toBeInstanceOf(OrderCreatedEvent);
+    expect(domainEvent.order.id.toString()).toBe("order-1");
+    expect(domainEvent.order.status).toBe("PENDING");
+    expect(domainEvent.order.items).toHaveLength(1);
+    expect(domainEvent.order.items[0].productName).toBe("RTX 4090");
+    expect(domainEvent.order.items[0].clientId.toString()).toBe("client-1");
   });
 });

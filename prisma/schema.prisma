@@ -30,6 +30,7 @@ model User {
   answers   Answer[]
   cart      Cart?
   notifications Notification[]
+  orderItems OrderItem[]
 }
 
 model Attachment {
@@ -52,8 +53,9 @@ model Product{
    user         User @relation(fields: [authorId], references: [id])
    attachments  ProductAttachment[]
    questions    Question[]
-    answers      Answer[]
-    cartProducts CartProduct[]
+   answers      Answer[]
+   cartProducts CartProduct[]
+   orderItems   OrderItem[]
 }
 
 model Cart {
@@ -139,6 +141,34 @@ model Outbox {
   createdAt   DateTime  @default(now())
 
   @@index([publishedAt])
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  CANCELED
+}
+
+model Order {
+  id        String      @id @default(uuid())
+  status    OrderStatus @default(PENDING)
+  createdAt DateTime    @default(now())
+
+  items     OrderItem[]
+}
+
+model OrderItem {
+  id          String  @id @default(uuid())
+  orderId     String
+  clientId    String
+  productId   String
+  productName String
+  quantity    Int
+  price       Int
+
+  order   Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  client  User    @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 }
 
 
