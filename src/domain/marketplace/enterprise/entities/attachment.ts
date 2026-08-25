@@ -1,8 +1,10 @@
 import { Entity } from "@/core/entity";
 import { UniqueEntityId } from "@/core/unique-entity-id";
+import { Optional } from "@/core/types/optional";
 
-interface AttachmentProps {
+export interface AttachmentProps {
     link: string;
+    createdAt?: Date;
 }
 
 export class Attachment extends Entity<AttachmentProps> {
@@ -10,9 +12,14 @@ export class Attachment extends Entity<AttachmentProps> {
         return this.props.link
     }
 
-    static create(props: AttachmentProps, id?: UniqueEntityId) {
+    get createdAt() {
+        return this.props.createdAt
+    }
+
+    static create(props: Optional<AttachmentProps, 'createdAt'>, id?: UniqueEntityId) {
         const attachment = new Attachment({
             ...props,
+            createdAt: props.createdAt ?? new Date(),
         }, id)
 
         return attachment

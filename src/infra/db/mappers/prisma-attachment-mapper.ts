@@ -7,6 +7,7 @@ export class PrismaAttachmentMapper {
     return Attachment.create(
       {
         link: raw.link,
+        createdAt: raw.createdAt,
       },
       new UniqueEntityId(raw.id),
     );
@@ -16,7 +17,7 @@ export class PrismaAttachmentMapper {
     return {
       id: attachment.id.toString(),
       link: attachment.link,
-      createdAt: new Date(),
+      createdAt: attachment.createdAt,
     };
   }
 }

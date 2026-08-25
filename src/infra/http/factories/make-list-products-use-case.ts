@@ -1,8 +1,8 @@
 import { ListProductsUseCase } from "@/domain/marketplace/app/use-cases/list-products";
-import { PrismaProductRespository } from "@/infra/db/repo/prisma-product-repository";
+import { PrismaProductRepository } from "@/infra/db/repo/prisma-product-repository";
 
 export function makeListProductsUseCase() {
-  const productRepository = new PrismaProductRespository();
+  const productRepository = new PrismaProductRepository();
 
   const listProductsUseCase = new ListProductsUseCase(productRepository);
 

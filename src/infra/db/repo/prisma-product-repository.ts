@@ -4,7 +4,7 @@ import { db } from "../libs/prisma";
 import { PrismaProductMapper } from "../mappers/prisma-product-mapper";
 import { PaginationParams } from "@/core/repo/pagination-params";
 
-export class PrismaProductRespository implements ProductRepository {
+export class PrismaProductRepository implements ProductRepository {
     async save(product: Product): Promise<void> {
       const data = PrismaProductMapper.toPrisma(product)
 
