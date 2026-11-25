@@ -67,15 +67,17 @@ app.register(fastifySwagger, {
   },
 });
 
-app.register(fastifySwaggerUi, {
-  routePrefix: "/docs",
-  uiConfig: {
-    docExpansion: "list",
-    deepLinking: true,
-  },
-  staticCSP: true,
-  transformStaticCSP: (header) => header,
-});
+if (env.NODE_ENV !== "production") {
+  app.register(fastifySwaggerUi, {
+    routePrefix: "/docs",
+    uiConfig: {
+      docExpansion: "list",
+      deepLinking: true,
+    },
+    staticCSP: true,
+    transformStaticCSP: (header) => header,
+  });
+}
 
 app.register(fastifyMultipart);
 app.register(userRoutes);

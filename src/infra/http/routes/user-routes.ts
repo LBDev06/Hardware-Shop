@@ -152,7 +152,7 @@ export function userRoutes(app: FastifyInstance) {
           },
         },
         response: {
-          201: {
+          200: {
             description: "E-mail alterado com sucesso",
             type: "object",
             properties: {
@@ -240,7 +240,7 @@ export function userRoutes(app: FastifyInstance) {
         description: "Retorna as informações do perfil do usuário autenticado via token JWT.",
         security: [{ bearerAuth: [] }],
         response: {
-          201: {
+          200: {
             description: "Dados do perfil retornados com sucesso",
             type: "object",
             properties: {

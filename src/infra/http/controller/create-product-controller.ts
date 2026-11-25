@@ -39,7 +39,7 @@ export async function createProductController(req: FastifyRequest, reply: Fastif
     }
 
    return reply.status(201).send({
-         user: ProductPresenter.toHTTP(result.value.product),
+         product: ProductPresenter.toHTTP(result.value.product),
     });
 
    } catch (error) {

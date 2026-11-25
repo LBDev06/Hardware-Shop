@@ -24,7 +24,7 @@ export async function deleteProductController(req: FastifyRequest, reply: Fastif
      if(result.isLeft()){
       return HttpErrorPresenter.toHTTP(result.value, reply)
      }
-    return reply.status(201).send({
+    return reply.status(200).send({
     message: "Product deleted."
     })
     } catch (error) {

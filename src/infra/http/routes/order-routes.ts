@@ -47,7 +47,7 @@ export function orderRoutes(app: FastifyInstance) {
             productId: { type: "string", format: "uuid", example: "9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d" },
             productName: { type: "string", example: "Placa de Vídeo RTX 4070" },
             quantity: { type: "integer", minimum: 1, example: 1 },
-            price: { type: "number", minimum: 1, example: 450000, description: "Preço em centavos" },
+            price: { type: "integer", minimum: 1, example: 450000, description: "Preço em centavos" },
             paymentMethodId: { type: "string", example: "pm_card_visa", description: "Identificador do método de pagamento no Stripe" },
           },
         },

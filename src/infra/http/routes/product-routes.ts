@@ -58,7 +58,7 @@ export function productRoutes(app: FastifyInstance) {
             description: "Produto criado com sucesso",
             type: "object",
             properties: {
-              user: {
+              product: {
                 type: "object",
                 properties: productSchemaProperties,
               },
@@ -89,7 +89,7 @@ export function productRoutes(app: FastifyInstance) {
           },
         },
         response: {
-          201: {
+          200: {
             description: "Produto removido com sucesso",
             type: "object",
             properties: {
@@ -558,7 +558,7 @@ export function productRoutes(app: FastifyInstance) {
           type: "object",
           required: ["answerId"],
           properties: {
-            answerId: { type: "string", format: "uuid", example: "7f9bba2b-1b5b-2aab-7abb-0a8b5a1ba4b" },
+            answerId: { type: "string", format: "uuid", example: "7f9bba2b-1b5b-2aab-7abb-0a8b5a1ba4b1" },
           },
         },
         body: {
@@ -598,7 +598,7 @@ export function productRoutes(app: FastifyInstance) {
           type: "object",
           required: ["answerId"],
           properties: {
-            answerId: { type: "string", format: "uuid", example: "7f9bba2b-1b5b-2aab-7abb-0a8b5a1ba4b" },
+            answerId: { type: "string", format: "uuid", example: "7f9bba2b-1b5b-2aab-7abb-0a8b5a1ba4b1" },
           },
         },
         response: {

@@ -16,7 +16,7 @@ export async function profileController(req: FastifyRequest, reply: FastifyReply
       return;
     }
 
-    return reply.status(201).send({
+    return reply.status(200).send({
       user: UserPresenter.toHTTP(result.value.user),
     });
   } catch {

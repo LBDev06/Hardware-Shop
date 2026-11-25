@@ -32,7 +32,7 @@ export async function changeUserEmailController(
       return HttpErrorPresenter.toHTTP(result.value, reply);
     }
 
-    return reply.status(201).send({
+    return reply.status(200).send({
       user: UserPresenter.toHTTP(result.value.user),
     });
   } catch (error) {
